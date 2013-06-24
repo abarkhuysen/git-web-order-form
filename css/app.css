@@ -1,8 +1,7 @@
-.userTable {
-	width: 30%;
+.strong {
+	font-weight: bolder;
 }
 
-span {
-	display: block;
-	padding-bottom: 10px;
+.inblock {
+	display: inline-block;
 }
