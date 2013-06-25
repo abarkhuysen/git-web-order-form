@@ -11,18 +11,13 @@
 
 // This tells javascript to wait until the document is finished loading before executing. Very important!
 $(document).ready(function(){
-	var deliveryCost = 50;
 
 	// Whenever a user does something to a class='radio-delivery', check if radio-yes-delivery was
-	// selected and then either add or remove 50 to Delivery Cost
+	// selected and then recalculate totals
 	$('.radio-delivery').change(function() {
 		if($('.radio-yes-delivery').is(':checked')) {
-			// They DO want delivery - add R50 to delivery cost and recalculate totals
-			$('.fillin-delivery').text(deliveryCost);
 			setTotals();
 		} else {
-			// They DO NOT want delivery - subtract R50 from delivery cost and recalculate totals
-			$('.fillin-delivery').text(0);
 			setTotals();
 		}
 	});
@@ -33,7 +28,7 @@ $(document).ready(function(){
 		// Calculate and set subtotal
 		var numItems = parseInt($(this).val());
 		var itemID = $(this).parent().parent().attr('data-id');
-		var orderCost = parseFloat($(this).parent().parent().attr('data-inclvat'));
+		var orderCost = parseFloat($(this).parent().parent().attr('data-price'));
 		var subtotal = numItems*orderCost;
 		$(this).parent().siblings('.fill-in-subtotal').children('div').text(subtotal);
 
@@ -50,17 +45,16 @@ $(document).ready(function(){
 		var totalExvat = 0;
 		var totalInclvat = 0;
 		var totalDelivery = 0;
-
-		if($('.radio-yes-delivery').is(':checked')) {
-			totalDelivery = deliveryCost;
-		}
+		var deliveryCost = 0;
+		var minDelivery = 0;
+		var calcDelivery = 0;
+		var grandTotal = 0;
 
 		// Iterate through each qty input and add to totalItems, totalExvat, totalInclvat as it goes
 		$('.input-amountitems').each(function() {
 			// Get the exvat and inclvat from the tr
 			// NOTE: this = input, this.parent = td, this.parent.parent = tr
-			var orderExvat = parseFloat($(this).parent().parent().attr('data-exvat'));
-			var orderInclvat = parseFloat($(this).parent().parent().attr('data-inclvat'));
+			var orderPrice = parseFloat($(this).parent().parent().attr('data-price'));
 
 			// Get the number of items. If it's not a number (NaN) - .e.g if someone put in a letter, then
 			// set to 0
@@ -68,9 +62,9 @@ $(document).ready(function(){
 			if(isNaN(numItems))
 				numItems = 0;
 
-			// Sum exvat and inclvat
-			var costExvat = numItems*orderExvat;
-			var costInclvat = numItems*orderInclvat;
+			// Sum qty * price
+			var costExvat = numItems*orderPrice;
+			var costInclvat = parseFloat((costExvat * 1.14));
 
 			// Increase totals
 			totalItems += numItems;
@@ -78,10 +72,34 @@ $(document).ready(function(){
 			totalInclvat += costInclvat;
 		});
 
+		// Whenever a user does something to a class='radio-delivery', check if radio-yes-delivery was
+		// selected and then calculate delivery accordingly
+		if($('.radio-yes-delivery').is(':checked')) {
+			// They DO want delivery - add deliveryCost
+			// Get customer minimum delivery charge
+			minDelivery = $('#minDelivery').attr('data-min-delivery');
+			calcDelivery = (totalExvat * 1.10) - totalExvat;
+
+			// Check to see if calculated delivery is more than customer minimum delivery charge and set accordingly
+			if (calcDelivery > minDelivery) {
+				totalDelivery = calcDelivery;
+			} else {
+				totalDelivery = minDelivery;
+			}
+			$('.fillin-delivery').text(totalDelivery);
+
+		} else {
+			// They DO NOT want delivery - subtract deliveryCost 
+			$('.fillin-delivery').text('0.00');
+		}
+
+		// Set the grand total after delivery been calculated
+		grandTotal = totalInclvat+totalDelivery;
+
 		// Fill in the fillins
 		$('.fillin-numproducts').text(totalItems);
-		$('.fillin-exvat').text(totalExvat);
-		$('.fillin-inclvat').text(totalInclvat);
-		$('.fillin-totalinclvat').text(totalInclvat+totalDelivery);
+		$('.fillin-exvat').text(totalExvat.toFixed(2));
+		$('.fillin-inclvat').text(totalInclvat.toFixed(2));
+		$('.fillin-totalinclvat').text(grandTotal.toFixed(2));
 	}
 });
