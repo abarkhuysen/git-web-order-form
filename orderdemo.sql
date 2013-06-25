@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
+-- version 3.2.4
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 25, 2013 at 03:38 PM
--- Server version: 5.5.27
--- PHP Version: 5.4.7
+-- Host: localhost
+-- Generation Time: Jun 25, 2013 at 09:23 PM
+-- Server version: 5.1.44
+-- PHP Version: 5.3.1
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -54,6 +53,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `items` bigint(20) NOT NULL,
   `total_ex_vat` decimal(10,2) NOT NULL,
   `total_incl_vat` decimal(10,2) NOT NULL,
+  `delivery` decimal(10,2) NOT NULL,
+  `grand_total` decimal(10,2) NOT NULL,
   `status` varchar(6) COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
@@ -64,8 +65,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `total_incl_vat`, `status`, `created`, `modified`) VALUES
-(2, 1, 5, 100.00, 100.00, 'Open', '2013-06-24 00:00:00', '2013-06-24 00:00:00');
+INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `total_incl_vat`, `delivery`, `grand_total`, `status`, `created`, `modified`) VALUES
+(1, 1, 17, 1550.00, 1767.00, 155.00, 1922.00, 'Open', '2013-06-24 00:00:00', '2013-06-24 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -90,8 +91,4 @@ CREATE TABLE IF NOT EXISTS `order_items` (
 
 INSERT INTO `order_items` (`id`, `quote_id`, `product_id`, `price`, `qty`, `created`, `modified`) VALUES
 (1, 1, 2, 50.00, 3, '2013-06-24 00:00:00', '2013-06-24 00:00:00'),
-(2, 1, 15, 100.00, 7, '2013-06-24 00:00:00', '2013-06-24 00:00:00');
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+(2, 1, 15, 100.00, 14, '2013-06-24 00:00:00', '2013-06-24 00:00:00');
