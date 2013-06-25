@@ -23,9 +23,9 @@ include "lib/sql.php";
 		</div>
 		<ol>
 			<li>The totals get saved to my Orders database and the items get saved to my OrderItems database.</li>
-			<li>I want to calculate the totals on change of quantity (Qty).</li>
-			<li>I want to update the order line item with php to sql on qty change.</li>
-			<li>If the customer click the delivery option it must show the correct / corresponding total at bottom (not both like my sample)</li>
+			<li class='strikethrough'>I want to calculate the totals on change of quantity (Qty).</li>
+			<li class='strikethrough'>I want to update the order line item with php to sql on qty change.</li>
+			<li class='strikethrough'>If the customer click the delivery option it must show the correct / corresponding total at bottom (not both like my sample)</li>
 		</ol>
 		<hr>
 		<form>

@@ -5,3 +5,7 @@
 .inblock {
 	display: inline-block;
 }
+
+.strikethrough {
+	text-decoration: line-through;
+}
