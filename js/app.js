@@ -1,15 +1,3 @@
-/**
- * jQUERY NOTES:
- *
- * 1. $('.foo') -> The period means it is looking for a class (e.g. <div class='foo'>)
- *    $('#foo') -> The hash means it is looking for an ID (e.g. <div id='foo'>)
- *
- * 2. $('.foo') -> If there are multiple foo classes (e.g. <td class='foo'></td> <td class='foo'></td>), then
- *    jquery will do whatever follows to ALL of them. E.g. if all my rows in a table have class 'foo', then
- *    $('.foo').change(<<whatever>>) will do <<whatever>> to each tr (that has 'foo')
- */
-
-// This tells javascript to wait until the document is finished loading before executing. Very important!
 $(document).ready(function(){
 
 	// Whenever a user does something to a class='radio-delivery', check if radio-yes-delivery was
@@ -32,7 +20,6 @@ $(document).ready(function(){
 		var subtotal = numItems*orderCost;
 		$(this).parent().siblings('.fill-in-subtotal').children('div').text(subtotal);
 
-		// Set totals
 		setTotals();
 	});
 
@@ -53,11 +40,9 @@ $(document).ready(function(){
 		// Iterate through each qty input and add to totalItems, totalExvat, totalInclvat as it goes
 		$('.input-amountitems').each(function() {
 			// Get the exvat and inclvat from the tr
-			// NOTE: this = input, this.parent = td, this.parent.parent = tr
 			var orderPrice = parseFloat($(this).parent().parent().attr('data-price'));
 
-			// Get the number of items. If it's not a number (NaN) - .e.g if someone put in a letter, then
-			// set to 0
+			// Get the number of items. If it's not a number (NaN) - .e.g if someone put in a letter, then set to 0
 			var numItems = parseInt($(this).val());
 			if(isNaN(numItems))
 				numItems = 0;
