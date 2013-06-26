@@ -44,7 +44,12 @@ $orderItems = $sqlConnector->getOrderItems();
 					<input class="radio-delivery radio-no-delivery" type="radio" name="delivery">
 					<strong>No</strong>, we will collect this order
 				</label>
-				<span class="label label-warning"> Customer minimun delvery charge R100</span>
+
+
+				<!-- THIS IS NEEDED AND WILL CHANGE PER CUSTOMER R100 IS JUST A SAMPLE -->
+				<span id="minDelivery" class="label label-warning" data-min-delivery="89"> Customer minimun delvery charge R 89.00</span>
+			
+
 			</div>
 
 			<table class="table table-condensed table-hover table-bordered">
@@ -73,7 +78,7 @@ $orderItems = $sqlConnector->getOrderItems();
 						echo "<td>R ".$orderItem['features']."</td>";
 						echo "<td>R ".$orderItem['price']."</td>";
 						echo "<td><input type='text' placeholder='0' value='".$orderItem['qty']."' class='input input-small input-amountitems'></td>";
-						echo "<td class='fill-in-subtotal'>R<div class='inblock'>". ($orderItem['price'] * $orderItem['qty']) ."</div></td>";
+						echo "<td class='fill-in-subtotal'>R <div class='inblock'>". ($orderItem['price'] * $orderItem['qty']) ."</div></td>";
 						echo "</tr>";
 					}
 					
@@ -83,23 +88,13 @@ $orderItems = $sqlConnector->getOrderItems();
 						<td colspan="4"><span class="pull-right">Items</span></td>
 						<td>
 							<div class='fillin-numproducts inblock'>Loading..</div> 
-							product/s
 						</td>
 					</tr>
 					<tr class="text-info">
-						<td colspan="4"><span class="pull-right">Total Ex VAT</span></td>
+						<td colspan="4"><span class="pull-right">Sub Total</span></td>
 						<td>
 							<div class='inblock'>R</div>
-							<div class='fillin-exvat inblock'>Loading..</div>
-							<small> Excl. VAT</small>
-						</td>
-					</tr>
-					<tr class="text-info">
-						<td colspan="4"><span class="pull-right">Total Incl VAT</span></td>
-						<td>
-							<div class='inblock'>R</div>
-							<div class='fillin-inclvat inblock'>Loading..</div>
-							<small> Excl. VAT</small>
+							<div class='fillin-subtotal inblock'>Loading..</div>
 						</td>
 					</tr>
 					<tr class="text-info">
@@ -107,7 +102,20 @@ $orderItems = $sqlConnector->getOrderItems();
 						<td>
 							<div class='inblock'>R</div>
 							<div class='fillin-delivery inblock'>Loading..</div>
-							<small> Excl. VAT</small>
+						</td>
+					</tr>
+					<tr class="text-info">
+						<td colspan="4"><span class="pull-right">Amount Excl Vat</span></td>
+						<td>
+							<div class='inblock'>R</div>
+							<div class='fillin-amountexvat inblock'>Loading..</div>
+						</td>
+					</tr>
+					<tr class="text-info">
+						<td colspan="4"><span class="pull-right">Vat</span></td>
+						<td>
+							<div class='inblock'>R</div>
+							<div class='fillin-vat inblock'>Loading..</div>
 						</td>
 					</tr>
 					<tr class="text-info">
@@ -115,7 +123,6 @@ $orderItems = $sqlConnector->getOrderItems();
 						<td>
 							<div class='strong inblock'>R</div>
 							<div class='fillin-totalinclvat strong inblock'>Loading..</div>
-							<small> Incl. VAT</small>
 						</td>
 					</tr>
 				</tbody>

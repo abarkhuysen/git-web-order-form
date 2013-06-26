@@ -1,13 +1,15 @@
 $(document).ready(function() {
 	var orderID = $(".item-order-form").attr("data-orderid");
+	// sSet a zero var to the number value of 0
+	var zero = parseFloat(0).toFixed(2);
 
 	// Set initial values
 	if($('.radio-yes-delivery').is(':checked')) {
-		var totalExvat = getTotalExvat();
-		var totalDelivery = getTotalDelivery(totalExvat);
-		$('.fillin-delivery').text(totalDelivery.toFixed(2));
+		var subTotal = getSubTotal();
+		var totalDelivery = getTotalDelivery(subTotal);
+		$('.fillin-delivery').text(parseFloat(totalDelivery).toFixed(2));
 	} else {
-		$('.fillin-delivery').text(0);
+		$('.fillin-delivery').text(zero);
 	}
 	updateTotalsInView();
 	updateOrderTable(orderID);
@@ -15,16 +17,15 @@ $(document).ready(function() {
 	// Change delivery + totals + update DB whenever user clicks delivery button
 	$('.radio-delivery').change(function() {
 		if($('.radio-yes-delivery').is(':checked')) {
-			var totalExvat = getTotalExvat();
-			var totalDelivery = getTotalDelivery(totalExvat);
-
-			$('.fillin-delivery').text(totalDelivery);
+			var subTotal = getSubTotal();
+			var totalDelivery = getTotalDelivery(subTotal);
 			updateTotalsInView();
 			updateOrderTable(orderID);
+			$('.fillin-delivery').text(parseFloat(totalDelivery).toFixed(2));
 		} else {
-			$('.fillin-delivery').text(0);
 			updateTotalsInView();
 			updateOrderTable(orderID);
+			$('.fillin-delivery').text(zero);
 		}
 	});
 
@@ -70,54 +71,69 @@ $(document).ready(function() {
 	 * This function calculates total exvat of all items in table
 	 * @return {float} Total exvat of items in table
 	 */
-	 function getTotalExvat() {
-	 	var totalExvat = 0;
+	 function getSubTotal() {
+	 	var subTotal = 0;
 	 	$('.input-amountitems').each(function() {
 	 		var orderPrice = parseFloat($(this).parent().parent().attr('data-price'));
 	 		var numItems = parseInt($(this).val());
 	 		if(isNaN(numItems))
 	 			numItems = 0;
 	 		var costExvat = numItems*orderPrice;
-	 		totalExvat += costExvat;
+	 		subTotal += costExvat;
 	 	});
-	 	return totalExvat;
+	 	return subTotal;
 	 }
 
 	/**
 	 * This function calculates total inclvat of items in table
-	 * @param  {float} totalExvat Total exvat of items in table
+	 * @param  {float} subTotal Total exvat of items in table
 	 * @return {float} Total inclvat of items in table
 	 */
-	 function getTotalInclvat(totalExvat) {
-	 	return parseFloat((totalExvat * 1.14));
+	 function getAmountExVat(subTotal,totalDelivery) {
+	 	var amountExVat = parseFloat(subTotal) + parseFloat(totalDelivery);
+	 	return parseFloat(amountExVat);
+	 }
+
+	/**
+	 * This function calculates total inclvat of items in table
+	 * @param  {float} subTotal Total exvat of items in table
+	 * @return {float} Total inclvat of items in table
+	 */
+	 function getTotalVat(amountExVat) {
+	 	var vatAmount = (parseFloat(amountExVat) * 1.14 ) - amountExVat;
+	 	return parseFloat(vatAmount);
 	 }
 
 	/**
 	 * This function calculates total delivery cost of items in table
-	 * @param  {float} totalExvat Total exvat of items in table
+	 * @param  {float} subTotal Total exvat of items in table
 	 * @return {float}            Total delivery cost of items in table
 	 */
-	 function getTotalDelivery(totalExvat) {
-	 	var minDelivery = 100;
+	 function getTotalDelivery(subTotal) {
+	 	
+	 	/** THIS IS NEEDED AND WILL CHANGE PER CUSTOMER R100 IS JUST A SAMPLE **/
+	 	var minDelivery = $('#minDelivery').attr('data-min-delivery');
 	 	var totalDelivery = minDelivery;
+
 	 	if($('.radio-yes-delivery').is(':checked')) {
-	 		calcDelivery = (totalExvat * 1.10) - totalExvat;
+	 		calcDelivery = (subTotal * 1.10) - subTotal;
 	 		if (calcDelivery > minDelivery)
 	 			totalDelivery = calcDelivery;
 	 	} else {
-	 		totalDelivery = 0;
+	 		totalDelivery = 0.00;
 	 	}
 	 	return totalDelivery;
 	 }
 
 	/**
 	 * This function gets the grand total of items in table (using inclvat, delivery)
-	 * @param  {float} totalInclvat  Total inclvat of items in table
-	 * @param  {float} totalDelivery Total delivery cost of items in table
+	 * @param  {float} amountExVat  Total inclvat of items in table
+	 * @param  {float} vatAmount Total delivery cost of items in table
 	 * @return {float}               Grand total inclvat price of items in table
 	 */
-	 function getGrandTotal(totalInclvat, totalDelivery) {
-	 	return totalInclvat+totalDelivery;
+	 function getGrandTotal(amountExVat, vatAmount) {
+	 	var grandTotal = parseFloat(amountExVat) + parseFloat(vatAmount);
+	 	return parseFloat(grandTotal);
 	 }
 
 	/**
@@ -125,17 +141,19 @@ $(document).ready(function() {
 	 * @return void
 	 */
 	 function updateTotalsInView() {
-	 	var totalItems = getTotalItems();
-	 	var totalExvat = getTotalExvat();
-	 	var totalInclvat = getTotalInclvat(totalExvat);
-	 	var totalDelivery = getTotalDelivery(totalExvat);
-	 	var grandTotal = getGrandTotal(totalInclvat, totalDelivery);
+	 	var totalItems 		= getTotalItems();
+	 	var subTotal 		= getSubTotal();
+	 	var totalDelivery 	= getTotalDelivery(subTotal);
+	 	var amountExVat 	= getAmountExVat(subTotal,totalDelivery);
+	 	var vatAmount		= getTotalVat(amountExVat);
+	 	var grandTotal 		= getGrandTotal(amountExVat, vatAmount);
 
 		// Fill in the fillins
 		$('.fillin-numproducts').text(totalItems);
-		$('.fillin-exvat').text(totalExvat.toFixed(2));
-		$('.fillin-inclvat').text(totalInclvat.toFixed(2));
-		$('.fillin-totalinclvat').text(grandTotal.toFixed(2));
+		$('.fillin-subtotal').text(parseFloat(subTotal).toFixed(2));
+		$('.fillin-amountexvat').text(parseFloat(amountExVat).toFixed(2));
+		$('.fillin-vat').text(parseFloat(vatAmount).toFixed(2));
+		$('.fillin-totalinclvat').text(parseFloat(grandTotal).toFixed(2));
 	}
 
 	/**
@@ -144,11 +162,12 @@ $(document).ready(function() {
 	 * @return void
 	 */
 	function updateOrderTable(id) {
-		var totalItems = getTotalItems();
-	 	var totalExvat = getTotalExvat();
-	 	var totalInclvat = getTotalInclvat(totalExvat);
-	 	var totalDelivery = getTotalDelivery(totalExvat);
-	 	var grandTotal = getGrandTotal(totalInclvat, totalDelivery);
+		var totalItems 		= getTotalItems();
+	 	var subTotal 		= getSubTotal();
+	 	var totalDelivery 	= getTotalDelivery(subTotal);
+	 	var amountExVat 	= getAmountExVat(subTotal,totalDelivery);
+		var vatAmount		= getTotalVat(amountExVat);
+	 	var grandTotal 		= getGrandTotal(amountExVat, vatAmount);
 
 		$.ajax({
 			type: "POST",
@@ -157,8 +176,8 @@ $(document).ready(function() {
 				fn: "updateOrder",
 				id: id,
 				items: totalItems,
-				total_ex_vat: totalExvat,
-				total_incl_vat: totalInclvat,
+				total_ex_vat: subTotal,
+				total_incl_vat: amountExVat,
 				delivery: totalDelivery,
 				grand_total: grandTotal
 			}
