@@ -1,4 +1,46 @@
 $(document).ready(function() {
+	$("#codeSearch").typeahead({
+		source: function(query, process) {
+			$.ajax({
+				url: "lib/sql.php",
+				type: "POST",
+				data:  {
+					fn: "findProduct",
+					code: query,
+					selectors: "code"
+				},
+				dataType: "JSON",
+				async: true,
+				success: function(data) {
+					console.dir(data);
+					process(data); 
+				}
+			});
+		},
+		minLength: 1
+	});
+
+	// When we get a 6 digit change on codesearch (e.g. when typeahead returns a code), then go look up that code's details
+	// NOTE: This might be better to do on buttonclick? The idea is that typehead ONLY gets 'code', but the rest of your
+	// form will go back to the DB and get the rest of the data it needs
+	$("#codeSearch").change(function() {
+		var newVal = $(this).val();
+		if(newVal.length == 6) {
+			$.ajax({
+				url: "lib/sql.php",
+				type: "POST",
+				data: {
+					fn: "findProduct",
+					code: newVal,
+					selectors: "*"
+				},
+				success: function(data) {
+					alert(data);
+				}
+			});
+		}
+	});
+
 	var orderID = $(".item-order-form").attr("data-orderid");
 	// sSet a zero var to the number value of 0
 	var zero = parseFloat(0).toFixed(2);
@@ -161,28 +203,28 @@ $(document).ready(function() {
 	 * @param  {int} id The id of the orders table row to update
 	 * @return void
 	 */
-	function updateOrderTable(id) {
-		var totalItems 		= getTotalItems();
+	 function updateOrderTable(id) {
+	 	var totalItems 		= getTotalItems();
 	 	var subTotal 		= getSubTotal();
 	 	var totalDelivery 	= getTotalDelivery(subTotal);
 	 	var amountExVat 	= getAmountExVat(subTotal,totalDelivery);
-		var vatAmount		= getTotalVat(amountExVat);
+	 	var vatAmount		= getTotalVat(amountExVat);
 	 	var grandTotal 		= getGrandTotal(amountExVat, vatAmount);
 
-		$.ajax({
-			type: "POST",
-			url: "lib/sql.php",
-			data: {
-				fn: "updateOrder",
-				id: id,
-				items: totalItems,
-				total_ex_vat: subTotal,
-				total_incl_vat: amountExVat,
-				delivery: totalDelivery,
-				grand_total: grandTotal
-			}
-		});
-	}
+	 	$.ajax({
+	 		type: "POST",
+	 		url: "lib/sql.php",
+	 		data: {
+	 			fn: "updateOrder",
+	 			id: id,
+	 			items: totalItems,
+	 			total_ex_vat: subTotal,
+	 			total_incl_vat: amountExVat,
+	 			delivery: totalDelivery,
+	 			grand_total: grandTotal
+	 		}
+	 	});
+	 }
 
 	/**
 	 * This function updates the order_items table
@@ -190,15 +232,15 @@ $(document).ready(function() {
 	 * @param  {int} qty The new item quantity
 	 * @return void
 	 */
-	function updateOrderItemTable(id, qty) {
-		$.ajax({
-			type: "POST",
-			url: "lib/sql.php",
-			data: {
-				fn: "updateOrderItem",
-				id: id,
-				qty: qty
-			}
-		});
-	}
-});
+	 function updateOrderItemTable(id, qty) {
+	 	$.ajax({
+	 		type: "POST",
+	 		url: "lib/sql.php",
+	 		data: {
+	 			fn: "updateOrderItem",
+	 			id: id,
+	 			qty: qty
+	 		}
+	 	});
+	 }
+	});

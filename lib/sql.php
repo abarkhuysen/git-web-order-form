@@ -5,45 +5,36 @@ if(isset($_POST['fn'])) {
 	switch($_POST['fn']) {
 		case 'updateOrder': 
 			// Safely retrieves POST data from our javascript
-			$id = isset($_POST['id']) ? $_POST['id'] : null;
-			$items = isset($_POST['items']) ? $_POST['items'] : null;
-			$total_ex_vat = isset($_POST['total_ex_vat']) ? $_POST['total_ex_vat'] : null;
-			$total_incl_vat = isset($_POST['total_incl_vat']) ? $_POST['total_incl_vat'] : null;
-			$delivery = isset($_POST['delivery']) ? $_POST['delivery'] : null;
-			$grand_total = isset($_POST['grand_total']) ? $_POST['grand_total'] : null;
+		$id = isset($_POST['id']) ? $_POST['id'] : null;
+		$items = isset($_POST['items']) ? $_POST['items'] : null;
+		$total_ex_vat = isset($_POST['total_ex_vat']) ? $_POST['total_ex_vat'] : null;
+		$total_incl_vat = isset($_POST['total_incl_vat']) ? $_POST['total_incl_vat'] : null;
+		$delivery = isset($_POST['delivery']) ? $_POST['delivery'] : null;
+		$grand_total = isset($_POST['grand_total']) ? $_POST['grand_total'] : null;
 
 			// Update table with our POST data
-			$sqlConnector = new SQL_Connection();
-			$sqlConnector->updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total);
-
-			break;
+		$sqlConnector = new SQL_Connection();
+		$sqlConnector->updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total);
+		break;
 		case 'updateOrderItem':
 			// Safely retrieves POST data from our javascript
-			$id = isset($_POST['id']) ? $_POST['id'] : null;
-			$qty = isset($_POST['qty']) ? $_POST['qty'] : null;
+		$id = isset($_POST['id']) ? $_POST['id'] : null;
+		$qty = isset($_POST['qty']) ? $_POST['qty'] : null;
 
 			// Update table with our POST data
-			$sqlConnector = new SQL_Connection();
-			$sqlConnector->updateOrderItem($id, $qty);
-
-			break;
-
+		$sqlConnector = new SQL_Connection();
+		$sqlConnector->updateOrderItem($id, $qty);
+		break;
 		case 'findProduct':
-			$limit = isset($_POST['limit']) ? $_POST['limit'] : 6;
-			$code = isset($_POST['code']) ? $_POST['code'] : null;
+		$code = isset($_POST['code']) ? $_POST['code'] : null;
+		$selectors = isset($_POST['selectors']) ? $_POST['selectors'] : null;
 
 			// Do the search in our products table
-			$sqlConnector = new SQL_Connection();
-			$rows = $sqlConnector->findProductCode($code, $limit);
-
-			if(!empty($rows)) {
-				echo json_encode($rows);
-			}
-
-			break;
-
+		$sqlConnector = new SQL_Connection();
+		$sqlConnector->findProduct($code, $selectors);
+		break;
 		default:
-			break;
+		break;
 	}
 }
 
@@ -108,19 +99,20 @@ class SQL_Connection {
 	 * This function returns data from the products table to be displayed in the type ahead field
 	 * @return array Raw output of products table
 	 */
-	function findProductCode($code, $limit) {
+	function findProduct($code, $selectors) {
 		$rows = $this->querySql("
-			SELECT id, code, price 
+			SELECT {$selectors}
 			FROM orderdemo.products 
-			WHERE code LIKE '%{$code}%' 
-			LIMIT {$limit}");
-				
-			// Only returning 1 field to bootstrap typeahead
+			WHERE code LIKE '%{$code}%'");
+
+		// Only returning 1 field to bootstrap typeahead if selector is code
+		if($selectors == "code") {
 			foreach($rows as $product) {
-		    $output[] = $product['code'];
-			}
-		if (!empty($output)) {
-			return $output;
+				$output[] = $product['code'];
+			} 
+			echo json_encode($output);
+		} else {
+			echo json_encode($rows);
 		}
 	}
 
