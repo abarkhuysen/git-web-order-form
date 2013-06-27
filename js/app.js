@@ -12,7 +12,7 @@ $(document).ready(function() {
 				dataType: "JSON",
 				async: true,
 				success: function(data) {
-					console.dir(data);
+					//console.dir(data);
 					process(data); 
 				}
 			});
@@ -25,21 +25,33 @@ $(document).ready(function() {
 	// form will go back to the DB and get the rest of the data it needs
 	$("#codeSearch").change(function() {
 		var newVal = $(this).val();
-		if(newVal.length == 6) {
+		if(newVal.length >= 4) {
 			$.ajax({
 				url: "lib/sql.php",
 				type: "POST",
 				data: {
 					fn: "findProduct",
 					code: newVal,
-					selectors: "*"
+					selectors: "id,code,price"
 				},
 				success: function(data) {
-					alert(data);
+					updateItemFields(data);
 				}
 			});
 		}
 	});
+
+	/**
+	 * This function sets the auto search results in to the form fields
+	 * @return void
+	 */
+	 function updateItemFields(data) {
+		var result = $.parseJSON(data);
+		$('#id').val(result[0].id);
+		$('#code').val(result[0].code);
+		$('#price').val(result[0].price);
+	}
+
 
 	var orderID = $(".item-order-form").attr("data-orderid");
 	// sSet a zero var to the number value of 0
