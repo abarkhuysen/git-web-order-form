@@ -13,7 +13,7 @@ include "lib/sql.php";
 	<link href="css/app.css" rel="stylesheet">
 
 	<script src="js/jquery/jquery-1.9.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap/js/bootstrap.min.js"></script>
 	<script src="js/app.js"></script>
 </head>
 
