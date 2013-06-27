@@ -123,7 +123,7 @@ class SQL_Connection {
 	 */
 	function querySql($query) {
 		// Establish connection
-		$link = mysql_connect('localhost', 'root', '');
+		$link = mysql_connect('localhost', 'root', '92e32c');
 		if (!$link) {
 			die('Could not connect: ' . mysql_error());
 		}
