@@ -27,6 +27,21 @@ if(isset($_POST['fn'])) {
 			$sqlConnector->updateOrderItem($id, $qty);
 
 			break;
+
+		case 'findProduct':
+			$limit = isset($_POST['limit']) ? $_POST['limit'] : 6;
+			$code = isset($_POST['code']) ? $_POST['code'] : null;
+
+			// Do the search in our products table
+			$sqlConnector = new SQL_Connection();
+			$rows = $sqlConnector->findProductCode($code, $limit);
+
+			if(!empty($rows)) {
+				echo json_encode($rows);
+			}
+
+			break;
+
 		default:
 			break;
 	}
@@ -78,15 +93,35 @@ class SQL_Connection {
 	}
 
 	/**
-	 * This function returns data from the order_items table JOINED with items from the items_table
-	 * @return array Raw output of order_items table joined with items_table
+	 * This function returns data from the order_items table JOINED with items from the products
+	 * @return array Raw output of order_items table joined with products
 	 */
 	function getOrderItems() {
 		return $this->querySql('
 			SELECT * 
 			FROM orderdemo.order_items oi 
-			LEFT JOIN orderdemo.items_table it 
-			ON oi.product_id = it.product_id');
+			LEFT JOIN orderdemo.products it 
+			ON oi.product_id = it.id');
+	}
+
+	/**
+	 * This function returns data from the products table to be displayed in the type ahead field
+	 * @return array Raw output of products table
+	 */
+	function findProductCode($code, $limit) {
+		$rows = $this->querySql("
+			SELECT id, code, price 
+			FROM orderdemo.products 
+			WHERE code LIKE '%{$code}%' 
+			LIMIT {$limit}");
+				
+			// Only returning 1 field to bootstrap typeahead
+			foreach($rows as $product) {
+		    $output[] = $product['code'];
+			}
+		if (!empty($output)) {
+			return $output;
+		}
 	}
 
 	/**
