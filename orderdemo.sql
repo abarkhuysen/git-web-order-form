@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.5.2.2
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Jun 25, 2013 at 09:23 PM
--- Server version: 5.1.44
--- PHP Version: 5.3.1
+-- Host: 127.0.0.1
+-- Generation Time: Jun 27, 2013 at 02:12 PM
+-- Server version: 5.5.27
+-- PHP Version: 5.4.7
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -18,28 +19,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- Database: `orderdemo`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `items_table`
---
-
-CREATE TABLE IF NOT EXISTS `items_table` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL,
-  `code` varchar(6) NOT NULL,
-  `features` varchar(2555) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `items_table`
---
-
-INSERT INTO `items_table` (`id`, `product_id`, `code`, `features`) VALUES
-(1, 2, 'XYZ789', 'Ut rhoncus purus eu ipsum pretium adipiscing'),
-(2, 15, 'ABC123', 'Fusce mattis in ante cursus pellentesque');
 
 -- --------------------------------------------------------
 
@@ -66,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 --
 
 INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `total_incl_vat`, `delivery`, `grand_total`, `status`, `created`, `modified`) VALUES
-(1, 1, 17, 1550.00, 1767.00, 155.00, 1922.00, 'Open', '2013-06-24 00:00:00', '2013-06-24 00:00:00');
+(1, 1, 1010, 100500.00, 110550.00, 10050.00, 126027.00, 'Open', '2013-06-24 00:00:00', '2013-06-24 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -90,5 +69,33 @@ CREATE TABLE IF NOT EXISTS `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `quote_id`, `product_id`, `price`, `qty`, `created`, `modified`) VALUES
-(1, 1, 2, 50.00, 3, '2013-06-24 00:00:00', '2013-06-24 00:00:00'),
-(2, 1, 15, 100.00, 14, '2013-06-24 00:00:00', '2013-06-24 00:00:00');
+(1, 1, 2, 50.00, 10, '2013-06-24 00:00:00', '2013-06-24 00:00:00'),
+(2, 1, 1, 100.00, 1000, '2013-06-24 00:00:00', '2013-06-24 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(6) NOT NULL,
+  `features` varchar(2555) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `code`, `features`, `price`) VALUES
+(1, 'AYZ789', 'Ut rhoncus purus eu ipsum pretium adipiscing', 100.00),
+(2, 'ABC123', 'Fusce mattis in ante cursus pellentesque', 50.00),
+(3, 'A1234A', 'Praesent nec nulla elit. In quis diam metus.', 599.00),
+(4, 'ACC345', 'Fusce consequat placerat dolor.', 1.75);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
