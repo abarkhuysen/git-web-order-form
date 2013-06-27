@@ -32,6 +32,9 @@ $orderItems = $sqlConnector->getOrderItems();
 			<form class="form-inline">
 				<input id="codeSearch" name="code" type="text" class="input-xxlarge" placeholder="Search for product code" autocomplete="off">
 				<input name="qty" type="text" class="input-small" placeholder="0">
+				<input id="id">
+				<input id="code">
+				<input id="price">
 				<button type="submit" class="btn">Add to order</button>
 			</form>
 		</div>
