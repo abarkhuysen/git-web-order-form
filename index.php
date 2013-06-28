@@ -29,12 +29,12 @@ $orderItems = $sqlConnector->getOrderItems();
 		</div>
 		<div class="well well-small wellblack">
 			<p>Auto search the products table for typed code.</p>
-			<form class="form-inline">
+			<form class="form-inline" method="GET">
 				<input id="codeSearch" name="code" type="text" class="input-xxlarge" placeholder="Search for product code" autocomplete="off">
 				<input name="qty" type="text" class="input-small" placeholder="0">
-				<input id="id">
-				<input id="code">
-				<input id="price">
+				<input name="id" id="id" type="hidden">
+				<input name="code" id="code" type="hidden">
+				<input name="price" id="price" type="hidden">
 				<button type="submit" class="btn">Add to order</button>
 			</form>
 		</div>
