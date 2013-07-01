@@ -41,7 +41,7 @@ $orderItems = $sqlConnector->getOrderItems();
 					<span class="help-block error text-error" id="qty_error">The quantity can not be blank</span>
 					<span class="help-block error text-error" id="codeSearch_error">The code can not be blank</span>
 		</div>
-		<?php echo "<form class='item-order-form' data-orderid='".$orderItems[0]['quote_id']."'>" ?>
+		<?php echo "<form class='item-order-form' data-orderid='".$orderItems[0]['order_id']."'>" ?>
 		<table class="table table-condensed table-hover table-bordered">
 			<thead>
 				<tr>
