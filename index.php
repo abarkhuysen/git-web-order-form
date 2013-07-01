@@ -29,14 +29,17 @@ $orderItems = $sqlConnector->getOrderItems();
 		</div>
 		<div class="well well-small wellblack">
 			<p>Auto search the products table for typed code.</p>
-			<form class="form-inline" method="GET">
-				<input id="codeSearch" name="code" type="text" class="input-xxlarge" placeholder="Search for product code" autocomplete="off">
-				<input name="qty" type="text" class="input-small" placeholder="0">
+			<form class="form-inline" name="updateOrderItem" action="">
+				<input id="codeSearch" name="code" type="text" class="input-xxlarge" placeholder="Type product code to start search" autocomplete="off">
+				<input name="qty" id="qty" type="text" class="input-small" placeholder="Quantity">
 				<input name="id" id="id" type="hidden">
 				<input name="code" id="code" type="hidden">
 				<input name="price" id="price" type="hidden">
-				<button type="submit" class="btn">Add to order</button>
+				<input name="fn" id="fn" type="hidden" value="insertOrderItem">
+				<button type="submit" class="btn" id="submitOrderItemForm">Add to order</button>
 			</form>
+					<span class="help-block error text-error" id="qty_error">The quantity can not be blank</span>
+					<span class="help-block error text-error" id="codeSearch_error">The code can not be blank</span>
 		</div>
 		<?php echo "<form class='item-order-form' data-orderid='".$orderItems[0]['quote_id']."'>" ?>
 		<table class="table table-condensed table-hover table-bordered">
