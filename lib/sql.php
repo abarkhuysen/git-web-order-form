@@ -16,6 +16,7 @@ if(isset($_POST['fn'])) {
 		$sqlConnector = new SQL_Connection();
 		$sqlConnector->updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total);
 		break;
+
 		case 'updateOrderItem':
 			// Safely retrieves POST data from our javascript
 		$id = isset($_POST['id']) ? $_POST['id'] : null;
@@ -25,6 +26,7 @@ if(isset($_POST['fn'])) {
 		$sqlConnector = new SQL_Connection();
 		$sqlConnector->updateOrderItem($id, $qty);
 		break;
+
 		case 'findProduct':
 		$code = isset($_POST['code']) ? $_POST['code'] : null;
 		$selectors = isset($_POST['selectors']) ? $_POST['selectors'] : null;
@@ -33,6 +35,16 @@ if(isset($_POST['fn'])) {
 		$sqlConnector = new SQL_Connection();
 		$sqlConnector->findProduct($code, $selectors);
 		break;
+
+		case 'insertOrderItem':
+		$code = isset($_POST['code']) ? $_POST['code'] : null;
+		$selectors = isset($_POST['selectors']) ? $_POST['selectors'] : null;
+
+			// Do the search in our products table
+		$sqlConnector = new SQL_Connection();
+		$sqlConnector->findProduct($code, $selectors);
+		break;
+		
 		default:
 		break;
 	}
@@ -57,7 +69,8 @@ class SQL_Connection {
 			UPDATE orderdemo.orders 
 			SET items="'.$items.'", total_ex_vat="'.$total_ex_vat.'", 
 			total_incl_vat="'.$total_incl_vat.'", delivery="'.$delivery.'", grand_total="'.$grand_total.'"
-			WHERE id="'.$id.'"');
+			WHERE id="'.$id.'"'
+		);
 	}
 
 	/**
@@ -70,7 +83,23 @@ class SQL_Connection {
 		$this->querySql('
 			UPDATE orderdemo.order_items 
 			SET qty="'.$qty.'"
-			WHERE id="'.$id.'"');
+			WHERE id="'.$id.'"'
+		);
+	}
+
+	/**
+	 * This function inserts new product items in to the order_items table
+	 * @param  int $order_id  The order id we are inserting
+	 * @param  int $product_id  The product id we are inserting
+	 * @param  int $price  The price we are inserting
+	 * @param  int $qty The quantity we are inserting
+	 * @return void
+	 */
+	function insertOrderItem($order_id, $product_id, $price, $qty) {
+		$this->querySql("
+			INSERT INTO orderdemo.order_items ( `id`, `order_id`, `product_id`, `price`, `qty` ) 
+			VALUES ( NULL, '{$order_id}', '{$product_id}', '{$price}', '{$qty}' )"
+		);
 	}
 
 	/**
@@ -80,7 +109,8 @@ class SQL_Connection {
 	function getOrders() {
 		return $this->querySql('
 			SELECT * 
-			FROM orderdemo.orders');
+			FROM orderdemo.orders'
+		);
 	}
 
 	/**
