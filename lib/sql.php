@@ -36,6 +36,7 @@ if(isset($_POST['fn'])) {
 		$sqlConnector->findProduct($code, $selectors);
 		break;
 
+
 		case 'insertOrderItem':
 		$code = isset($_POST['code']) ? $_POST['code'] : null;
 		$selectors = isset($_POST['selectors']) ? $_POST['selectors'] : null;
@@ -44,7 +45,7 @@ if(isset($_POST['fn'])) {
 		$sqlConnector = new SQL_Connection();
 		$sqlConnector->findProduct($code, $selectors);
 		break;
-		
+
 		default:
 		break;
 	}
