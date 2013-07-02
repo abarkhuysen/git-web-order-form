@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 27, 2013 at 02:12 PM
+-- Generation Time: Jul 02, 2013 at 09:50 AM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -35,8 +35,6 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `delivery` decimal(10,2) NOT NULL,
   `grand_total` decimal(10,2) NOT NULL,
   `status` varchar(6) COLLATE utf8_unicode_ci NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
@@ -44,8 +42,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `total_incl_vat`, `delivery`, `grand_total`, `status`, `created`, `modified`) VALUES
-(1, 1, 1010, 100500.00, 110550.00, 10050.00, 126027.00, 'Open', '2013-06-24 00:00:00', '2013-06-24 00:00:00');
+INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `total_incl_vat`, `delivery`, `grand_total`, `status`) VALUES
+(1, 1, 10, 800.00, 889.00, 89.00, 1013.46, 'Open');
 
 -- --------------------------------------------------------
 
@@ -55,22 +53,20 @@ INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `total_incl_
 
 CREATE TABLE IF NOT EXISTS `order_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `quote_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `qty` bigint(20) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `order_items`
 --
 
-INSERT INTO `order_items` (`id`, `quote_id`, `product_id`, `price`, `qty`, `created`, `modified`) VALUES
-(1, 1, 2, 50.00, 10, '2013-06-24 00:00:00', '2013-06-24 00:00:00'),
-(2, 1, 1, 100.00, 1000, '2013-06-24 00:00:00', '2013-06-24 00:00:00');
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `price`, `qty`) VALUES
+(1, 1, 2, 50.00, 1),
+(2, 1, 1, 100.00, 4);
 
 -- --------------------------------------------------------
 
