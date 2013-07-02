@@ -14,6 +14,7 @@ include "lib/sql.php";
 
 	<script src="js/jquery/jquery-1.9.1.min.js"></script>
 	<script src="js/bootstrap/js/bootstrap.min.js"></script>
+	<script src="js/helpers.js"></script>
 	<script src="js/app.js"></script>
 </head>
 
@@ -67,7 +68,7 @@ $orderItems = $sqlConnector->getOrderItems();
 							$total_qty += $orderItem['qty'];
 							$total_price += ($orderItem['price'] * $orderItem['qty']);
 
-							echo "<tr data-price='".$orderItem['price']."' data-id='".$orderItem['id']."' data-itemid='".$orderItem['id']."'>";
+							echo "<tr class='code-item' data-code='".$orderItem['code']."' data-price='".$orderItem['price']."' data-id='".$orderItem['id']."' data-itemid='".$orderItem['id']."'>";
 							echo "<td>".$orderItem['code']."</td>";
 							echo "<td>R ".$orderItem['features']."</td>";
 							echo "<td>R ".$orderItem['price']."</td>";
