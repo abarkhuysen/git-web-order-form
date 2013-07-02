@@ -32,14 +32,15 @@ $orderItems = $sqlConnector->getOrderItems();
 			<form class="form-inline" name="updateOrderItem" action="">
 				<input id="codeSearch" name="code" type="text" class="input-xxlarge" placeholder="Type product code to start search" autocomplete="off">
 				<input name="qty" id="qty" type="text" class="input-small" placeholder="Quantity">
-				<input name="id" id="id" type="hidden">
+				<input name="product_id" id="product_id" type="hidden">
 				<input name="code" id="code" type="hidden">
 				<input name="price" id="price" type="hidden">
-				<input name="fn" id="fn" type="hidden" value="insertOrderItem">
-				<button type="submit" class="btn" id="submitOrderItemForm">Add to order</button>
+				<input name="order_id" id="order_id" type="hidden" value="1">
+				<input type="submit" class="btn" id="submitOrderItemForm" value="Add to order">
 			</form>
-					<span class="help-block error text-error" id="qty_error">The quantity can not be blank</span>
-					<span class="help-block error text-error" id="codeSearch_error">The code can not be blank</span>
+					<span class="help-block error alert" id="codeSearch_error">The code can not be blank</span>
+					<span class="help-block error alert" id="qty_error">The quantity can not be blank</span>
+					<span class="help-block error alert alert-success" id="message">The item was added to order</span>
 		</div>
 		<?php echo "<form class='item-order-form' data-orderid='".$orderItems[0]['order_id']."'>" ?>
 		<table class="table table-condensed table-hover table-bordered">
@@ -134,12 +135,12 @@ $orderItems = $sqlConnector->getOrderItems();
 			<button type="submit" class="btn btn-primary">Checkout</button>
 		</div>
 
-	</form>
-</div>
+		</form>
+	</div>
 
-<div id="footer">
-	<div class="container">
-		<p class="muted credit">Example courtesy <a href="https://github.com/abarkhuysen">Arthur Barkhuysen</a>, 
+	<div id="footer">
+		<div class="container">
+			<p class="muted credit">Example courtesy <a href="https://github.com/abarkhuysen">Arthur Barkhuysen</a>, 
 			<a href="https://github.com/jadekler">Jean Barkhuysen</a>.</p>
 		</div>
 	</div>
