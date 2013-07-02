@@ -3,6 +3,7 @@
 // Checks for POST data from AJAX
 if(isset($_POST['fn'])) {
 	switch($_POST['fn']) {
+		
 		case 'updateOrder': 
 			// Safely retrieves POST data from our javascript
 		$id = isset($_POST['id']) ? $_POST['id'] : null;
@@ -72,7 +73,7 @@ class SQL_Connection {
 			UPDATE orderdemo.orders 
 			SET items="'.$items.'", total_ex_vat="'.$total_ex_vat.'", 
 			total_incl_vat="'.$total_incl_vat.'", delivery="'.$delivery.'", grand_total="'.$grand_total.'"
-			WHERE id="'.$id.'"'
+			WHERE id="'.$id.'"','update'
 		);
 	}
 
@@ -83,10 +84,8 @@ class SQL_Connection {
 	 * @return void
 	 */
 	function updateOrderItem($id, $qty) {
-		$this->querySql('
-			UPDATE orderdemo.order_items 
-			SET qty="'.$qty.'"
-			WHERE id="'.$id.'"'
+		$this->querySql("UPDATE `orderdemo`.`order_items` SET `qty` = '{$qty}' WHERE `order_items`.`id` = {$id}",
+			"update"
 		);
 	}
 
@@ -101,7 +100,7 @@ class SQL_Connection {
 	function insertOrderItem($order_id, $product_id, $price, $qty) {
 		$this->querySql("
 			INSERT INTO orderdemo.order_items ( `id`, `order_id`, `product_id`, `price`, `qty` ) 
-			VALUES ( NULL, '{$order_id}', '{$product_id}', '{$price}', '{$qty}' )"
+			VALUES ( NULL, '{$order_id}', '{$product_id}', '{$price}', '{$qty}' )","update"
 		);
 	}
 
@@ -112,7 +111,7 @@ class SQL_Connection {
 	function getOrders() {
 		return $this->querySql('
 			SELECT * 
-			FROM orderdemo.orders'
+			FROM orderdemo.orders','select'
 		);
 	}
 
@@ -125,7 +124,8 @@ class SQL_Connection {
 			SELECT * 
 			FROM orderdemo.order_items oi 
 			LEFT JOIN orderdemo.products it 
-			ON oi.product_id = it.id');
+			ON oi.product_id = it.id','select'
+			);
 	}
 
 	/**
@@ -136,7 +136,8 @@ class SQL_Connection {
 		$rows = $this->querySql("
 			SELECT {$selectors}
 			FROM orderdemo.products 
-			WHERE code LIKE '%{$code}%'");
+			WHERE code LIKE '%{$code}%'",'select'
+			);
 
 		// Only returning 1 field to bootstrap typeahead if selector is code
 		if($selectors == "code") {
@@ -154,26 +155,38 @@ class SQL_Connection {
 	 * @param  string $query The sql query to execute on the db
 	 * @return array 		 The resultant data from the db
 	 */
-	function querySql($query) {
+	function querySql($query, $type) {
+
 		// Establish connection
 		$link = mysql_connect('localhost', 'root', '92e32c');
 		if (!$link) {
 			die('Could not connect: ' . mysql_error());
 		}
 
-		// Query server
-		$result = mysql_query($query);
-		$resultArr = array();
+		switch ($type) {
+			case 'select':
+				// Query server
+				$result = mysql_query($query);
+				$resultArr = array();
 
-		// Collect data
-		while ($row = mysql_fetch_assoc($result)) {
-			$resultArr[] = $row;
+				// Collect data
+				while ($row = mysql_fetch_assoc($result)) {
+					$resultArr[] = $row;
+				}
+				return $resultArr;
+				break;
+
+			case 'update':
+				mysql_query($query);
+				break;
+
+			default:
+				# code...
+				break;
 		}
+				// Close connection
+				mysql_close($link);
 
-		// Close connection
-		mysql_close($link);
-
-		return $resultArr;
 	}
 }
 
