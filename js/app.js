@@ -1,85 +1,81 @@
 $(document).ready(function() {
+	/**
+	 * Ajax to add new order item to order items table via aja
+	 * @return {[type]} [description]
+	 */
+	 $(function() {
+	 	$('.error').hide();
+	 	$("#submitOrderItemForm").click(function() {
+    		// Set values to be passed to validatuion and ahax
+    		var codeSearch = $("input#codeSearch").val();
+    		var qty = $("input#qty").val();
+    		var product_id = $("input#product_id").val();
+    		var price = $("input#price").val();
+    		var order_id = $("input#order_id").val();
 
-/**
- * Ajax to add new order item to order items table via aja
- * @return {[type]} [description]
- */
-	$(function() {
-    $('.error').hide();
-    $("#submitOrderItemForm").click(function() {
-    	// Set values to be passed to validatuion and ahax
-  	  var codeSearch = $("input#codeSearch").val();
-  	  var qty = $("input#qty").val();
-  	  var product_id = $("input#product_id").val();
-  	  var price = $("input#price").val();
-  	  var order_id = $("input#order_id").val();
+  	  		// Hide succes message until item is added to order
+  	  		$('#message').hide();
 
-  	  // Hide succes message until item is added to order
-			$('#message').hide();
+      		// validate and process form here
+      		$('.error').hide();
+      		if (codeSearch == "") {
+      			$("span#codeSearch_error").show();
+      			$("input#codeSearch").focus();
+      			return false;
+      		}	      
+      		$('.error').hide();
+      		if (qty == "") {
+      			$("span#qty_error").show();
+      			$("input#qty").focus();
+      			return false;
+      		}
 
-      // validate and process form here
-      $('.error').hide();
-  		if (codeSearch == "") {
-        $("span#codeSearch_error").show();
-        $("input#codeSearch").focus();
-        return false;
-      }	      
-      $('.error').hide();
-  		if (qty == "") {
-        $("span#qty_error").show();
-        $("input#qty").focus();
-        return false;
-      }
+      		$.ajax({
+      			cache: false,
+      			type: "POST",
+      			url: "lib/sql.php",
+      			data: {
+      				fn: "insertOrderItem",
+      				order_id: order_id, 
+      				product_id: product_id, 
+      				price: price, 
+      				qty: qty
+      			},
+      			success: function() {
+      				$('#message').fadeIn(1500).delay(1000).fadeOut(500);
+      				//$("#div1").load("index.php #orderItemsList");
+      			}
+      		});
+      		return false;
 
-		  $.ajax({
-		  	cache: false,
-		    type: "POST",
-		    url: "lib/sql.php",
-				data: {
-					fn: "insertOrderItem",
-					order_id: order_id, 
-					product_id: product_id, 
-					price: price, 
-					qty: qty
-				},
-		    success: function() {
-		      $('#message').fadeIn(1500);
-		      $("#div1").load("index.php #orderItemsList");
-		    }
-		  });
-		  return false;
+      	});
+});
 
-	    });
-	  });
-  
 
-/**
- * Bootstrap typeahead (auto complete)
- */
-	$("#codeSearch").typeahead({
-		source: function(query, process) {
-			$.ajax({
-				url: "lib/sql.php",
-				type: "POST",
-				data:  {
-					fn: "findProduct",
-					code: query,
-					selectors: "code"
-				},
-				dataType: "JSON",
-				async: true,
-				success: function(data) {
-					//console.dir(data);
-					process(data); 
-				}
-			});
-		},
-		minLength: 1
-	});
+	/**
+	 * Bootstrap typeahead (auto complete)
+	 */
+	 $("#codeSearch").typeahead({
+	 	source: function(query, process) {
+	 		$.ajax({
+	 			url: "lib/sql.php",
+	 			type: "POST",
+	 			data:  {
+	 				fn: "findProduct",
+	 				code: query,
+	 				selectors: "code"
+	 			},
+	 			dataType: "JSON",
+	 			async: true,
+	 			success: function(data) {
+	 				process(data); 
+	 			}
+	 		});
+	 	},
+	 	minLength: 1
+	 });
 
 	// When we get a 6 digit change on codesearch (e.g. when typeahead returns a code), then go look up that code's details
-	// NOTE: This might be better to do on buttonclick? The idea is that typehead ONLY gets 'code', but the rest of your
-	// form will go back to the DB and get the rest of the data it needs
 	$("#codeSearch").change(function() {
 		var newVal = $(this).val();
 		if(newVal.length >= 4) {
@@ -103,24 +99,24 @@ $(document).ready(function() {
 	 * @return void
 	 */
 	 function updateItemFields(data) {
-		var result = $.parseJSON(data);
-		$('#product_id').val(result[0].id);
-		$('#code').val(result[0].code);
-		$('#price').val(result[0].price);
-	}
+	 	var result = $.parseJSON(data);
+	 	$('#product_id').val(result[0].id);
+	 	$('#code').val(result[0].code);
+	 	$('#price').val(result[0].price);
+	 }
 
 	/**
 	 * orderID Set order id to use in ajax save functions
 	 * @type int
 	 */
-	var orderID = $(".item-order-form").attr("data-orderid");
+	 var orderID = $(".item-order-form").attr("data-orderid");
 	/**
 	 * Set a zero var to the number value of 0
 	 * @type {[type]}
 	 */
-	var zero = parseFloat(0).toFixed(2);
-	updateTotalsInView();
-	updateOrderTable(orderID);
+	 var zero = parseFloat(0).toFixed(2);
+	 updateTotalsInView();
+	 updateOrderTable(orderID);
 
 	// Change delivery + totals + update DB whenever user clicks delivery button
 	$('.radio-delivery').change(function() {
