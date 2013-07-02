@@ -18,7 +18,7 @@ if(isset($_POST['fn'])) {
 		break;
 
 		case 'updateOrderItem':
-			// Safely retrieves POST data from our javascript
+		// Safely retrieves POST data from our javascript
 		$id = isset($_POST['id']) ? $_POST['id'] : null;
 		$qty = isset($_POST['qty']) ? $_POST['qty'] : null;
 
@@ -36,14 +36,16 @@ if(isset($_POST['fn'])) {
 		$sqlConnector->findProduct($code, $selectors);
 		break;
 
-
 		case 'insertOrderItem':
-		$code = isset($_POST['code']) ? $_POST['code'] : null;
-		$selectors = isset($_POST['selectors']) ? $_POST['selectors'] : null;
+		// Safely retrieves POST data from our javascript
+		$order_id = isset($_POST['order_id']) ? $_POST['order_id'] : null;
+		$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : null;
+		$price = isset($_POST['price']) ? $_POST['price'] : null;
+		$qty = isset($_POST['qty']) ? $_POST['qty'] : null;
 
-			// Do the search in our products table
+		// Do the insert in to order_items table
 		$sqlConnector = new SQL_Connection();
-		$sqlConnector->findProduct($code, $selectors);
+		$sqlConnector->insertOrderItem($order_id, $product_id, $price, $qty);
 		break;
 
 		default:
