@@ -32,6 +32,7 @@ $(document).ready(function() {
       }
 
 		  $.ajax({
+		  	cache: false,
 		    type: "POST",
 		    url: "lib/sql.php",
 				data: {
@@ -43,6 +44,7 @@ $(document).ready(function() {
 				},
 		    success: function() {
 		      $('#message').fadeIn(1500);
+		      $("#div1").load("index.php #orderItemsList");
 		    }
 		  });
 		  return false;
