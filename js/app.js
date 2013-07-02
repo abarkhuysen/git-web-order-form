@@ -1,4 +1,59 @@
 $(document).ready(function() {
+
+/**
+ * Ajax to add new order item to order items table via aja
+ * @return {[type]} [description]
+ */
+	$(function() {
+    $('.error').hide();
+    $("#submitOrderItemForm").click(function() {
+    	// Set values to be passed to validatuion and ahax
+  	  var codeSearch = $("input#codeSearch").val();
+  	  var qty = $("input#qty").val();
+  	  var product_id = $("input#product_id").val();
+  	  var price = $("input#price").val();
+  	  var order_id = $("input#order_id").val();
+
+  	  // Hide succes message until item is added to order
+			$('#message').hide();
+
+      // validate and process form here
+      $('.error').hide();
+  		if (codeSearch == "") {
+        $("span#codeSearch_error").show();
+        $("input#codeSearch").focus();
+        return false;
+      }	      
+      $('.error').hide();
+  		if (qty == "") {
+        $("span#qty_error").show();
+        $("input#qty").focus();
+        return false;
+      }
+
+		  $.ajax({
+		    type: "POST",
+		    url: "lib/sql.php",
+				data: {
+					fn: "insertOrderItem",
+					order_id: order_id, 
+					product_id: product_id, 
+					price: price, 
+					qty: qty
+				},
+		    success: function() {
+		      $('#message').fadeIn(1500);
+		    }
+		  });
+		  return false;
+
+	    });
+	  });
+  
+
+/**
+ * Bootstrap typeahead (auto complete)
+ */
 	$("#codeSearch").typeahead({
 		source: function(query, process) {
 			$.ajax({
@@ -47,24 +102,21 @@ $(document).ready(function() {
 	 */
 	 function updateItemFields(data) {
 		var result = $.parseJSON(data);
-		$('#id').val(result[0].id);
+		$('#product_id').val(result[0].id);
 		$('#code').val(result[0].code);
 		$('#price').val(result[0].price);
 	}
 
-
+	/**
+	 * orderID Set order id to use in ajax save functions
+	 * @type int
+	 */
 	var orderID = $(".item-order-form").attr("data-orderid");
-	// sSet a zero var to the number value of 0
+	/**
+	 * Set a zero var to the number value of 0
+	 * @type {[type]}
+	 */
 	var zero = parseFloat(0).toFixed(2);
-
-	// Set initial values
-	if($('.radio-yes-delivery').is(':checked')) {
-		var subTotal = getSubTotal();
-		var totalDelivery = getTotalDelivery(subTotal);
-		$('.fillin-delivery').text(parseFloat(totalDelivery).toFixed(2));
-	} else {
-		$('.fillin-delivery').text(zero);
-	}
 	updateTotalsInView();
 	updateOrderTable(orderID);
 
@@ -170,7 +222,7 @@ $(document).ready(function() {
 	 	var totalDelivery = minDelivery;
 
 	 	if($('.radio-yes-delivery').is(':checked')) {
-	 		calcDelivery = (subTotal * 1.10) - subTotal;
+	 		calcDelivery = (subTotal * 1.05) - subTotal;
 	 		if (calcDelivery > minDelivery)
 	 			totalDelivery = calcDelivery;
 	 	} else {
@@ -208,6 +260,7 @@ $(document).ready(function() {
 		$('.fillin-amountexvat').text(parseFloat(amountExVat).toFixed(2));
 		$('.fillin-vat').text(parseFloat(vatAmount).toFixed(2));
 		$('.fillin-totalinclvat').text(parseFloat(grandTotal).toFixed(2));
+		$('.fillin-delivery').text(parseFloat(totalDelivery).toFixed(2));
 	}
 
 	/**
