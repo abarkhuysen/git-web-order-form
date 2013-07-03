@@ -72,7 +72,7 @@ $(document).ready(function() {
 		$(this).parent().siblings('.fill-in-subtotal').children('div').text(subtotal);
 		updateTotalsInView();
 		updateOrderTable(orderID);
-		updateOrderItemTable(itemID, $(this).val());
+		updateOrderItemTable(itemID, $(this).val(), 1);
 	});
 
 	// Bootstrap typeahead (auto complete)

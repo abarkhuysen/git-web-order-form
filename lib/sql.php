@@ -6,51 +6,52 @@ if(isset($_POST['fn'])) {
 		
 		case 'updateOrder': 
 			// Safely retrieves POST data from our javascript
-		$id = isset($_POST['id']) ? $_POST['id'] : null;
-		$items = isset($_POST['items']) ? $_POST['items'] : null;
-		$total_ex_vat = isset($_POST['total_ex_vat']) ? $_POST['total_ex_vat'] : null;
-		$total_incl_vat = isset($_POST['total_incl_vat']) ? $_POST['total_incl_vat'] : null;
-		$delivery = isset($_POST['delivery']) ? $_POST['delivery'] : null;
-		$grand_total = isset($_POST['grand_total']) ? $_POST['grand_total'] : null;
+			$id = isset($_POST['id']) ? $_POST['id'] : null;
+			$items = isset($_POST['items']) ? $_POST['items'] : null;
+			$total_ex_vat = isset($_POST['total_ex_vat']) ? $_POST['total_ex_vat'] : null;
+			$total_incl_vat = isset($_POST['total_incl_vat']) ? $_POST['total_incl_vat'] : null;
+			$delivery = isset($_POST['delivery']) ? $_POST['delivery'] : null;
+			$grand_total = isset($_POST['grand_total']) ? $_POST['grand_total'] : null;
 
 			// Update table with our POST data
-		$sqlConnector = new SQL_Connection();
-		$sqlConnector->updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total);
-		break;
+			$sqlConnector = new SQL_Connection();
+			$sqlConnector->updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total);
+			break;
 
 		case 'updateOrderItem':
-		// Safely retrieves POST data from our javascript
-		$id = isset($_POST['id']) ? $_POST['id'] : null;
-		$qty = isset($_POST['qty']) ? $_POST['qty'] : null;
+			// Safely retrieves POST data from our javascript
+			$id = isset($_POST['id']) ? $_POST['id'] : null;
+			$qty = isset($_POST['qty']) ? $_POST['qty'] : null;
+			$order_id = isset($_POST['order_id']) ? $_POST['order_id'] : null;
 
 			// Update table with our POST data
-		$sqlConnector = new SQL_Connection();
-		$sqlConnector->updateOrderItem($id, $qty);
-		break;
+			$sqlConnector = new SQL_Connection();
+			$sqlConnector->updateOrderItem($id, $qty, $order_id);
+			break;
 
 		case 'findProduct':
-		$code = isset($_POST['code']) ? $_POST['code'] : null;
-		$selectors = isset($_POST['selectors']) ? $_POST['selectors'] : null;
+			$code = isset($_POST['code']) ? $_POST['code'] : null;
+			$selectors = isset($_POST['selectors']) ? $_POST['selectors'] : null;
 
 			// Do the search in our products table
-		$sqlConnector = new SQL_Connection();
-		$sqlConnector->findProduct($code, $selectors);
+			$sqlConnector = new SQL_Connection();
+			$sqlConnector->findProduct($code, $selectors);
 		break;
 
 		case 'insertOrderItem':
-		// Safely retrieves POST data from our javascript
-		$order_id = isset($_POST['order_id']) ? $_POST['order_id'] : null;
-		$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : null;
-		$price = isset($_POST['price']) ? $_POST['price'] : null;
-		$qty = isset($_POST['qty']) ? $_POST['qty'] : null;
+			// Safely retrieves POST data from our javascript
+			$order_id = isset($_POST['order_id']) ? $_POST['order_id'] : null;
+			$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : null;
+			$price = isset($_POST['price']) ? $_POST['price'] : null;
+			$qty = isset($_POST['qty']) ? $_POST['qty'] : null;
 
-		// Do the insert in to order_items table
-		$sqlConnector = new SQL_Connection();
-		$sqlConnector->insertOrderItem($order_id, $product_id, $price, $qty);
+			// Do the insert in to order_items table
+			$sqlConnector = new SQL_Connection();
+			$sqlConnector->insertOrderItem($order_id, $product_id, $price, $qty);
 		break;
 
 		default:
-		break;
+			break;
 	}
 }
 
@@ -73,8 +74,8 @@ class SQL_Connection {
 			UPDATE orderdemo.orders 
 			SET items="'.$items.'", total_ex_vat="'.$total_ex_vat.'", 
 			total_incl_vat="'.$total_incl_vat.'", delivery="'.$delivery.'", grand_total="'.$grand_total.'"
-			WHERE id="'.$id.'"','update'
-		);
+			WHERE id="'.$id.'"',
+			'update');
 	}
 
 	/**
@@ -83,10 +84,13 @@ class SQL_Connection {
 	 * @param  int $qty The new quantity for this item
 	 * @return void
 	 */
-	function updateOrderItem($id, $qty) {
-		$this->querySql("UPDATE `orderdemo`.`order_items` SET `qty` = '{$qty}' WHERE `order_items`.`id` = {$id}",
-			"update"
-		);
+	function updateOrderItem($id, $qty, $order_id) {
+		$this->querySql('
+			UPDATE orderdemo.order_items 
+			SET qty = "'.$qty.'"
+			WHERE product_id = "'.$id.'"
+			AND order_id = "'.$order_id.'"', 
+			'update');
 	}
 
 	/**
@@ -98,10 +102,10 @@ class SQL_Connection {
 	 * @return void
 	 */
 	function insertOrderItem($order_id, $product_id, $price, $qty) {
-		$this->querySql("
+		$this->querySql('
 			INSERT INTO orderdemo.order_items ( `id`, `order_id`, `product_id`, `price`, `qty` ) 
-			VALUES ( NULL, '{$order_id}', '{$product_id}', '{$price}', '{$qty}' )","update"
-		);
+			VALUES ( NULL, "'.$order_id.'", "'.$product_id.'", "'.$price.'", "'.$qty.'" )',
+			'update');
 	}
 
 	/**
@@ -111,8 +115,8 @@ class SQL_Connection {
 	function getOrders() {
 		return $this->querySql('
 			SELECT * 
-			FROM orderdemo.orders','select'
-		);
+			FROM orderdemo.orders',
+			'select');
 	}
 
 	/**
@@ -124,8 +128,8 @@ class SQL_Connection {
 			SELECT * 
 			FROM orderdemo.order_items oi 
 			LEFT JOIN orderdemo.products it 
-			ON oi.product_id = it.id','select'
-			);
+			ON oi.product_id = it.id',
+			'select');
 	}
 
 	/**
@@ -136,8 +140,8 @@ class SQL_Connection {
 		$rows = $this->querySql("
 			SELECT {$selectors}
 			FROM orderdemo.products 
-			WHERE code LIKE '%{$code}%'",'select'
-			);
+			WHERE code LIKE '%{$code}%'",
+			'select');
 
 		// Only returning 1 field to bootstrap typeahead if selector is code
 		if($selectors == "code") {
@@ -173,19 +177,21 @@ class SQL_Connection {
 				while ($row = mysql_fetch_assoc($result)) {
 					$resultArr[] = $row;
 				}
+
 				return $resultArr;
 				break;
 
 			case 'update':
-				mysql_query($query);
+				echo mysql_query($query);
 				break;
 
 			default:
 				# code...
 				break;
 		}
-				// Close connection
-				mysql_close($link);
+		
+		// Close connection
+		mysql_close($link);
 
 	}
 }

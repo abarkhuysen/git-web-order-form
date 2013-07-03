@@ -129,13 +129,13 @@ function updateTotalsInView() {
 	var vatAmount		= getTotalVat(amountExVat);
 	var grandTotal 		= getGrandTotal(amountExVat, vatAmount);
 
-// Fill in the fillins
-$('.fillin-numproducts').text(totalItems);
-$('.fillin-subtotal').text(parseFloat(subTotal).toFixed(2));
-$('.fillin-amountexvat').text(parseFloat(amountExVat).toFixed(2));
-$('.fillin-vat').text(parseFloat(vatAmount).toFixed(2));
-$('.fillin-totalinclvat').text(parseFloat(grandTotal).toFixed(2));
-$('.fillin-delivery').text(parseFloat(totalDelivery).toFixed(2));
+	// Fill in the fillins
+	$('.fillin-numproducts').text(totalItems);
+	$('.fillin-subtotal').text(parseFloat(subTotal).toFixed(2));
+	$('.fillin-amountexvat').text(parseFloat(amountExVat).toFixed(2));
+	$('.fillin-vat').text(parseFloat(vatAmount).toFixed(2));
+	$('.fillin-totalinclvat').text(parseFloat(grandTotal).toFixed(2));
+	$('.fillin-delivery').text(parseFloat(totalDelivery).toFixed(2));
 }
 
 /**
@@ -172,14 +172,15 @@ function updateOrderTable(id) {
 * @param  {int} qty The new item quantity
 * @return void
 */
-function updateOrderItemTable(id, qty) {
+function updateOrderItemTable(id, qty, order_id) {
 	$.ajax({
 		type: "POST",
 		url: "lib/sql.php",
 		data: {
 			fn: "updateOrderItem",
 			id: id,
-			qty: qty
+			qty: qty,
+			order_id: order_id
 		}
 	});
 }

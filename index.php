@@ -39,9 +39,9 @@ $orderItems = $sqlConnector->getOrderItems();
 				<input name="order_id" id="order_id" type="hidden" value="1">
 				<input type="submit" class="btn" id="submitOrderItemForm" value="Add to order">
 			</form>
-					<span class="help-block error alert" id="codeSearch_error">The code can not be blank</span>
-					<span class="help-block error alert" id="qty_error">The quantity can not be blank</span>
-					<span class="help-block error alert alert-success" id="message">The item was added to order</span>
+			<span class="help-block error alert" id="codeSearch_error">The code can not be blank</span>
+			<span class="help-block error alert" id="qty_error">The quantity can not be blank</span>
+			<span class="help-block error alert alert-success" id="message">The item was added to order</span>
 		</div>
 
 		<div id="div1">
@@ -138,14 +138,14 @@ $orderItems = $sqlConnector->getOrderItems();
 
 					<button type="submit" class="btn btn-primary">Checkout</button>
 				</div>
-				</form>
-			</div>
+			</form>
 		</div>
 	</div>
+</div>
 
-	<div id="footer">
-		<div class="container">
-			<p class="muted credit">Example courtesy <a href="https://github.com/abarkhuysen">Arthur Barkhuysen</a>, 
+<div id="footer">
+	<div class="container">
+		<p class="muted credit">Example courtesy <a href="https://github.com/abarkhuysen">Arthur Barkhuysen</a>, 
 			<a href="https://github.com/jadekler">Jean Barkhuysen</a>.</p>
 		</div>
 	</div>
