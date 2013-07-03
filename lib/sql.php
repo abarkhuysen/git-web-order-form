@@ -88,7 +88,7 @@ class SQL_Connection {
 		$this->querySql('
 			UPDATE orderdemo.order_items 
 			SET qty = "'.$qty.'"
-			WHERE product_id = "'.$id.'"
+			WHERE id = "'.$id.'"
 			AND order_id = "'.$order_id.'"', 
 			'update');
 	}
@@ -185,7 +185,7 @@ class SQL_Connection {
 				break;
 
 			case 'update':
-				echo mysql_query($query);
+				mysql_query($query);
 				break;
 
 			default:
