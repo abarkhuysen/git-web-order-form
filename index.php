@@ -20,7 +20,8 @@ include "lib/sql.php";
 
 <?php
 $sqlConnector = new SQL_Connection();
-$orderItems = $sqlConnector->getOrderItems();
+$orderItems = $sqlConnector->getOrderItems(1);
+//echo "<pre>";print_r($orderItems);echo "</pre>";
 ?>
 
 <body>
@@ -68,7 +69,7 @@ $orderItems = $sqlConnector->getOrderItems();
 							$total_qty += $orderItem['qty'];
 							$total_price += ($orderItem['price'] * $orderItem['qty']);
 
-							echo "<tr class='code-item' data-code='".$orderItem['code']."' data-price='".$orderItem['price']."' data-id='".$orderItem['id']."' data-itemid='".$orderItem['id']."'>";
+							echo "<tr class='code-item' data-code='".$orderItem['code']."' data-price='".$orderItem['price']."' data-id='".$orderItem['id']."' >";
 							echo "<td>".$orderItem['code']."</td>";
 							echo "<td>R ".$orderItem['features']."</td>";
 							echo "<td>R ".$orderItem['price']."</td>";
