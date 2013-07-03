@@ -14,19 +14,14 @@ $(document).ready(function() {
 		var price = $("input#price").val();
 		var order_id = $("input#order_id").val();
 
-		// Hide succes message until item is added to order
-		$('#message').hide();
-		// Validate and process form here
-		$('.error').hide();
-
 		if (codeSearch == "") {
-			$("span#codeSearch_error").show();
+			$("span#codeSearch_error").fadeIn(500).delay(1000).fadeOut(500);
 			$("input#codeSearch").focus();
 			return false;
 		}         
-		$('.error').hide();
+
 		if (qty == "") {
-			$("span#qty_error").show();
+			$("span#qty_error").fadeIn(500).delay(1000).fadeOut(500);
 			$("input#qty").focus();
 			return false;
 		}
@@ -42,8 +37,9 @@ $(document).ready(function() {
 				price: price, 
 				qty: qty
 			},
-			success: function() {
-				$('#message').fadeIn(1500).delay(1000).fadeOut(500);
+			success: function(data) {
+				console.dir(data);
+				$('#message').fadeIn(500).delay(1000).fadeOut(500);
 				//$("#div1").load("index.php #orderItemsList");
 			}
 		});

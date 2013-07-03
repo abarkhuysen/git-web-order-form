@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
+-- version 3.2.4
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Jul 02, 2013 at 09:50 AM
--- Server version: 5.5.27
--- PHP Version: 5.4.7
+-- Host: localhost
+-- Generation Time: Jul 03, 2013 at 12:35 AM
+-- Server version: 5.1.44
+-- PHP Version: 5.3.1
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -43,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 --
 
 INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `total_incl_vat`, `delivery`, `grand_total`, `status`) VALUES
-(1, 1, 10, 800.00, 889.00, 89.00, 1013.46, 'Open');
+(1, 1, 12, 0.00, 0.00, 89.00, 0.00, 'Open');
 
 -- --------------------------------------------------------
 
@@ -58,15 +57,15 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   `price` decimal(10,2) NOT NULL,
   `qty` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `order_items`
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `price`, `qty`) VALUES
-(1, 1, 2, 50.00, 1),
-(2, 1, 1, 100.00, 4);
+(2, 1, 1, 100.00, 6),
+(13, 1, 4, 1.75, 5);
 
 -- --------------------------------------------------------
 
@@ -91,7 +90,3 @@ INSERT INTO `products` (`id`, `code`, `features`, `price`) VALUES
 (2, 'ABC123', 'Fusce mattis in ante cursus pellentesque', 50.00),
 (3, 'A1234A', 'Praesent nec nulla elit. In quis diam metus.', 599.00),
 (4, 'ACC345', 'Fusce consequat placerat dolor.', 1.75);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
