@@ -120,16 +120,19 @@ class SQL_Connection {
 	}
 
 	/**
-	 * This function returns data from the order_items table JOINED with items from the products
+	 * This function returns data from the order_items table JOINED with items from the products where our order_id equals the passed id
+	 * @param  [type] $order_id [description]
 	 * @return array Raw output of order_items table joined with products
 	 */
-	function getOrderItems() {
-		return $this->querySql('
-			SELECT * 
+	function getOrderItems($order_id) {
+		//Our previous query selected all the fields from both databases and used the wrong id(from products) to update the order_items data
+		return $this->querySql("
+			SELECT oi.id, oi.price, oi.qty, oi.order_id, pr.code, pr.features 
 			FROM orderdemo.order_items oi 
-			LEFT JOIN orderdemo.products it 
-			ON oi.product_id = it.id',
-			'select');
+			LEFT JOIN orderdemo.products pr 
+			ON oi.product_id = pr.id
+			WHERE oi.order_id = {$order_id}", "select"
+			);
 	}
 
 	/**
@@ -162,7 +165,7 @@ class SQL_Connection {
 	function querySql($query, $type) {
 
 		// Establish connection
-		$link = mysql_connect('localhost', 'root', '');
+		$link = mysql_connect('localhost', 'root', '92e32c');
 		if (!$link) {
 			die('Could not connect: ' . mysql_error());
 		}
