@@ -28,6 +28,7 @@ $orderItems = $sqlConnector->getOrderItems(1);
 	<div class="container">
 		<div class="page-header">
 			<h1>Web Order Form</h1>
+			<iframe src="http://ghbtns.com/github-btn.html?user=abarkhuysen&type=follow&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="165" height="20"></iframe>
 		</div>
 		<div class="well well-small wellblack">
 			<p>Auto search the products table for typed code.</p>
