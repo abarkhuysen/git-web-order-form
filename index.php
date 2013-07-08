@@ -37,6 +37,7 @@ $orderItems = $sqlConnector->getOrderItems(1);
 				<input name="product_id" id="product_id" type="hidden">
 				<input name="code" id="code" type="hidden">
 				<input name="price" id="price" type="hidden">
+				<input name="features" id="features" type="hidden">
 				<input name="order_id" id="order_id" type="hidden" value="1">
 				<input type="submit" class="btn" id="submitOrderItemForm" value="Add to order">
 			</form>
@@ -71,7 +72,7 @@ $orderItems = $sqlConnector->getOrderItems(1);
 
 							echo "<tr class='code-item' data-code='".$orderItem['code']."' data-price='".$orderItem['price']."' data-id='".$orderItem['id']."' >";
 							echo "<td>".$orderItem['code']."</td>";
-							echo "<td>R ".$orderItem['features']."</td>";
+							echo "<td>".$orderItem['features']."</td>";
 							echo "<td>R ".$orderItem['price']."</td>";
 							echo "<td><input type='text' placeholder='0' value='".$orderItem['qty']."' class='input input-small input-amountitems'></td>";
 							echo "<td class='fill-in-subtotal'>R <div class='inblock'>". ($orderItem['price'] * $orderItem['qty']) ."</div></td>";

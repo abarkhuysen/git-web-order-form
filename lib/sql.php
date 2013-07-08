@@ -103,9 +103,20 @@ class SQL_Connection {
 	 */
 	function insertOrderItem($order_id, $product_id, $price, $qty) {
 		$this->querySql('
-			INSERT INTO orderdemo.order_items ( `id`, `order_id`, `product_id`, `price`, `qty` ) 
-			VALUES ( NULL, "'.$order_id.'", "'.$product_id.'", "'.$price.'", "'.$qty.'" )',
+			INSERT INTO orderdemo.order_items (`order_id`, `product_id`, `price`, `qty` ) 
+			VALUES ("'.$order_id.'", "'.$product_id.'", "'.$price.'", "'.$qty.'")',
 			'update');
+
+		$rows = $this->querySql('
+			SELECT id
+			FROM orderdemo.order_items
+			WHERE order_id = "'.$order_id.'"
+			AND product_id = "'.$product_id.'"
+			AND price = "'.$price.'"
+			AND qty = "'.$qty.'"',
+			'select');
+
+		echo json_encode($rows);
 	}
 
 	/**

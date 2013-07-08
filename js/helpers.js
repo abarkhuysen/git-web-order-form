@@ -183,4 +183,5 @@ function updateItemFields(data) {
 	$('#product_id').val(result[0].id);
 	$('#code').val(result[0].code);
 	$('#price').val(result[0].price);
+	$('#features').val(result[0].features);
 }

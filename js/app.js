@@ -1,20 +1,23 @@
 $(document).ready(function() {
+	// Initial page setup
 	var orderID = $(".item-order-form").attr("data-orderid");
 	var zero = parseFloat(0).toFixed(2);
-
 	updateTotalsInView();
 	updateOrderTable(orderID);
 	$('.error').hide();
 
-	$("#submitOrderItemForm").click(function() {
-		// Set values to be passed to validatuion and ahax
-		var codeSearch = $("input#codeSearch").val();
+	// Submit 'Add an item' form
+	$("#submitOrderItemForm").click(function(e) {
+		e.preventDefault();
+
+		var code = $("input#codeSearch").val();
 		var qty = $("input#qty").val();
 		var product_id = $("input#product_id").val();
 		var price = $("input#price").val();
+		var features = $("input#features").val();
 		var order_id = $("input#order_id").val();
 
-		if (codeSearch == "") {
+		if (code == "") {
 			$("span#codeSearch_error").fadeIn(500).delay(1000).fadeOut(500);
 			$("input#codeSearch").focus();
 			return false;
@@ -26,6 +29,7 @@ $(document).ready(function() {
 			return false;
 		}
 
+		// ADD ORDER ITEM TO order_items
 		$.ajax({
 			cache: false,
 			type: "POST",
@@ -38,8 +42,28 @@ $(document).ready(function() {
 				qty: qty
 			},
 			success: function(data) {
-				console.dir(data);
+				// ADD ORDER ITEM TO VIEW
 				$('#message').fadeIn(500).delay(1000).fadeOut(500);
+
+				data = JSON.parse(data);
+				var id = data[0].id;
+
+				$(".code-item").last().after("\
+					<tr class='code-item' data-code='"+code+"' data-price='"+price+"' data-id='"+id+"'>\
+					<td>"+code+"</td>\
+					<td>"+features+"</td>\
+					<td>R "+price+"</td>\
+					<td><input type='text' placeholder='0' value='"+qty+"' class='input input-small input-amountitems'></td>\
+					<td class='fill-in-subtotal'>R <div class='inblock'>"+(price*qty)+"</div></td>\
+					</tr>\
+					");
+
+				// UPDATE VIEW TOTALS
+				var orderID = $(".item-order-form").attr("data-orderid");
+				updateTotalsInView();
+
+				// UPDATE DB TOTALS
+				updateOrderTable(orderID);
 			}
 		});
 	});
@@ -111,7 +135,7 @@ $(document).ready(function() {
 				data: {
 					fn: "findProduct",
 					code: newVal,
-					selectors: "id,code,price"
+					selectors: "*"
 				},
 				success: function(data) {
 					updateItemFields(data);
