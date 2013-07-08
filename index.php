@@ -21,7 +21,6 @@ include "lib/sql.php";
 <?php
 $sqlConnector = new SQL_Connection();
 $orderItems = $sqlConnector->getOrderItems(1);
-//echo "<pre>";print_r($orderItems);echo "</pre>";
 ?>
 
 <body>
