@@ -11,17 +11,6 @@ function getCodesOnPage() {
 }
 
 /**
-* This function sets the auto search results in to the form fields
-* @return void
-*/
-function updateItemFields(data) {
-	var result = $.parseJSON(data);
-	$('#product_id').val(result[0].id);
-	$('#code').val(result[0].code);
-	$('#price').val(result[0].price);
-}
-
-/**
 * This function calculates subtotals of a row element
 * @param  {jQuery Element Reference} elem 	Row element passed by jquery $()
 * @return {int}      						Row subtotal
@@ -183,4 +172,15 @@ function updateOrderItemTable(id, qty, order_id) {
 			order_id: order_id
 		}
 	});
+}
+
+/**
+* This function sets the auto search results in to the form fields
+* @return void
+*/
+function updateItemFields(data) {
+	var result = $.parseJSON(data);
+	$('#product_id').val(result[0].id);
+	$('#code').val(result[0].code);
+	$('#price').val(result[0].price);
 }

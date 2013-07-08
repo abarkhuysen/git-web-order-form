@@ -40,7 +40,6 @@ $(document).ready(function() {
 			success: function(data) {
 				console.dir(data);
 				$('#message').fadeIn(500).delay(1000).fadeOut(500);
-				//$("#div1").load("index.php #orderItemsList");
 			}
 		});
 	});
