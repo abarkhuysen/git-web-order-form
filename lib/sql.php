@@ -52,11 +52,12 @@ if(isset($_POST['fn'])) {
 
 		case 'removeProduct':
 			// Safely retrieves POST data from our javascript
-			$id = isset($_POST['id']) ? $_POST['id'] : null;
+			$item_id = isset($_POST['item_id']) ? $_POST['item_id'] : null;
+			$order_id = isset($_POST['order_id']) ? $_POST['order_id'] : null;
 
 			// Do the delete in order_items table where id = passed id
 			$sqlConnector = new SQL_Connection();
-			$sqlConnector->removeOrderItem($id);
+			$sqlConnector->removeOrderItem($item_id, $order_id);
 		break;
 
 		default:
@@ -133,14 +134,16 @@ class SQL_Connection {
 	 * @param  int $id The order item id passed to be deleted
 	 * @return int $id The order item id passed to be used by our java to remove the row from the form
 	 */
-	function removeOrderItem($id) {
+	function removeOrderItem($item_id,$order_id) {
 		$this->querySql('
 			DELETE FROM `orderdemo`.`order_items` 
-			WHERE `order_items`.`id` = '.$id,
+			WHERE `order_items`.`id` = '.$item_id,
 			'update'
 		);
 		//This is pasing the id back to our ajax to remove the current tavle row from the form/dom
-		echo $id;
+		$data['item_id'] = $item_id;
+		$data['order_id'] = $order_id;
+		echo json_encode($data);
 	}
 
 	/**
