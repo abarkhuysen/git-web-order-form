@@ -50,6 +50,15 @@ if(isset($_POST['fn'])) {
 			$sqlConnector->insertOrderItem($order_id, $product_id, $price, $qty);
 		break;
 
+		case 'removeProduct':
+			// Safely retrieves POST data from our javascript
+			$id = isset($_POST['id']) ? $_POST['id'] : null;
+
+			// Do the delete in order_items table where id = passed id
+			$sqlConnector = new SQL_Connection();
+			$sqlConnector->removeOrderItem($id);
+		break;
+
 		default:
 			break;
 	}
@@ -120,6 +129,21 @@ class SQL_Connection {
 	}
 
 	/**
+	 * This function remove the select order item form the table via ajax
+	 * @param  int $id The order item id passed to be deleted
+	 * @return int $id The order item id passed to be used by our java to remove the row from the form
+	 */
+	function removeOrderItem($id) {
+		$this->querySql('
+			DELETE FROM `orderdemo`.`order_items` 
+			WHERE `order_items`.`id` = '.$id,
+			'update'
+		);
+		//This is pasing the id back to our ajax to remove the current tavle row from the form/dom
+		echo $id;
+	}
+
+	/**
 	 * This function returns all data from the orders table
 	 * @return array Raw data from the orders table
 	 */
@@ -176,7 +200,7 @@ class SQL_Connection {
 	function querySql($query, $type) {
 
 		// Establish connection
-		$link = mysql_connect('localhost', 'root', '');
+		$link = mysql_connect('localhost', 'root', '92e32c');
 		if (!$link) {
 			die('Could not connect: ' . mysql_error());
 		}
