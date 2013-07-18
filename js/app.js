@@ -50,11 +50,12 @@ $(document).ready(function() {
 
 				$(".code-item").last().after("\
 					<tr class='code-item' data-code='"+code+"' data-price='"+price+"' data-id='"+id+"'>\
-					<td>"+code+"</td>\
-					<td>"+features+"</td>\
-					<td>R "+price+"</td>\
-					<td><input type='text' placeholder='0' value='"+qty+"' class='input input-small input-amountitems'></td>\
-					<td class='fill-in-subtotal'>R <div class='inblock'>"+(price*qty)+"</div></td>\
+						<td>"+code+"</td>\
+						<td>"+features+"</td>\
+						<td>R "+price+"</td>\
+						<td><input type='text' placeholder='0' value='"+qty+"' class='input input-small input-amountitems'></td>\
+						<td class='fill-in-subtotal'>R <div class='inblock'>"+(price*qty)+"</div></td>\
+						<td><span class='btn btn-small btn-warning removeRow'><i class='icon-trash'></i></span></td>\
 					</tr>\
 					");
 
@@ -117,7 +118,6 @@ $(document).ready(function() {
 							dataWithoutDuplicates.push(data[i]);
 						}
 					}
-
 					process(dataWithoutDuplicates); 
 				}
 			});
@@ -143,4 +143,25 @@ $(document).ready(function() {
 			});
 		}
 	});
+
+	// On the click of .removeRow we fade out the row the delete the item from the database
+	$(".removeRow").click(function() {
+		var id = $(this).parent().parent().attr('data-id');
+			$.ajax({
+				url: "lib/sql.php",
+				type: "POST",
+				data: {
+					fn: "removeProduct",
+					id: id,
+					selectors: ""
+				},
+				success: function(id) {
+					//Added this function to our helps.js
+					removeRowFromDom(id);
+				}
+			});
+
+	});
+
+
 });

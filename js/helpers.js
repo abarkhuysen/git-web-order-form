@@ -185,3 +185,12 @@ function updateItemFields(data) {
 	$('#price').val(result[0].price);
 	$('#features').val(result[0].features);
 }
+
+/**
+* This function fades out the row just deleted and remove it from the dom
+* @return void
+*/
+function removeRowFromDom(id) {
+	var rowId = $.parseJSON(id);
+	$("tr[data-id='" + rowId +"']").slideUp(500).delay(1000).remove();
+}
