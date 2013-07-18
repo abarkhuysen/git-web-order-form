@@ -146,18 +146,20 @@ $(document).ready(function() {
 
 	// On the click of .removeRow we fade out the row the delete the item from the database
 	$(".removeRow").click(function() {
-		var id = $(this).parent().parent().attr('data-id');
+		var item_id = $(this).parent().parent().attr('data-id');
+		var order_id = $(".item-order-form").attr("data-orderid");
 			$.ajax({
 				url: "lib/sql.php",
 				type: "POST",
 				data: {
 					fn: "removeProduct",
-					id: id,
+					item_id: item_id,
+					order_id: order_id,
 					selectors: ""
 				},
-				success: function(id) {
+				success: function(data) {
 					//Added this function to our helps.js
-					removeRowFromDom(id);
+					removeRowFromDom(data);
 				}
 			});
 

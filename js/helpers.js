@@ -187,10 +187,13 @@ function updateItemFields(data) {
 }
 
 /**
-* This function fades out the row just deleted and remove it from the dom
+* This function slides the row up and then remove it from the dom
 * @return void
 */
-function removeRowFromDom(id) {
-	var rowId = $.parseJSON(id);
-	$("tr[data-id='" + rowId +"']").slideUp(500).delay(1000).remove();
+function removeRowFromDom(data) {
+	var result = $.parseJSON(data);
+
+	$("tr[data-id='" + result.item_id +"']").slideUp(500).delay(500).remove();
+	updateTotalsInView();
+	updateOrderTable(result.order_id);
 }
