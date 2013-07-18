@@ -48,7 +48,7 @@ $orderItems = $sqlConnector->getOrderItems(1);
 
 		<div id="div1">
 			<div id="orderItemsList">
-				<?php echo "<form class='item-order-form' data-orderid='".$orderItems[0]['order_id']."'>" ?>
+				<?php echo "<form class='item-order-form' data-orderid='1'>" ?>
 				<table class="table table-condensed table-hover table-bordered">
 					<thead>
 						<tr>
@@ -57,67 +57,76 @@ $orderItems = $sqlConnector->getOrderItems(1);
 							<th>Unit Price</th>
 							<th>Qty</th>
 							<th>Sub Total</th>
+							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
+						//If no data in order display messages
+						if (!empty($orderItems)) {
+							/** Calculate initial values from database data **/
+							$total_qty = 0;
+							$total_price = 0;
 
-						/** Calculate initial values from database data **/
-						$total_qty = 0;
-						$total_price = 0;
+							foreach($orderItems as $orderItem) {
+								$total_qty += $orderItem['qty'];
+								$total_price += ($orderItem['price'] * $orderItem['qty']);
 
-						foreach($orderItems as $orderItem) {
-							$total_qty += $orderItem['qty'];
-							$total_price += ($orderItem['price'] * $orderItem['qty']);
-
-							echo "<tr class='code-item' data-code='".$orderItem['code']."' data-price='".$orderItem['price']."' data-id='".$orderItem['id']."' >";
-							echo "<td>".$orderItem['code']."</td>";
-							echo "<td>".$orderItem['features']."</td>";
-							echo "<td>R ".$orderItem['price']."</td>";
-							echo "<td><input type='text' placeholder='0' value='".$orderItem['qty']."' class='input input-small input-amountitems'></td>";
-							echo "<td class='fill-in-subtotal'>R <div class='inblock'>". ($orderItem['price'] * $orderItem['qty']) ."</div></td>";
-							echo "</tr>";
-						}
-
+								echo "<tr class='code-item' data-code='".$orderItem['code']."' data-price='".$orderItem['price']."' data-id='".$orderItem['id']."' >";
+								echo "<td>".$orderItem['code']."</td>";
+								echo "<td>".$orderItem['features']."</td>";
+								echo "<td>R ".$orderItem['price']."</td>";
+								echo "<td><input type='text' placeholder='0' value='".$orderItem['qty']."' class='input input-small input-amountitems'></td>";
+								echo "<td class='fill-in-subtotal'>R <div class='inblock'>". ($orderItem['price'] * $orderItem['qty']) ."</div></td>";
+								echo "<td><span class='btn btn-small btn-warning removeRow'><i class='icon-trash'></i></span></td>";
+								echo "</tr>";
+							}
+						} 
+						// else
+						// {
+						// 	echo "<tr class='code-item'>";
+						// 	echo "<td colspan='6'><span class='text-error'>No items in this order</span></td>";
+						// 	echo "</tr>";
+						// }
 						?>
 
 						<tr class="text-info">
 							<td colspan="4"><span class="pull-right">Items</span></td>
-							<td>
+							<td colspan="2">
 								<div class='fillin-numproducts inblock'>Loading..</div> 
 							</td>
 						</tr>
 						<tr class="text-info">
 							<td colspan="4"><span class="pull-right">Sub Total</span></td>
-							<td>
+							<td colspan="2">
 								<div class='inblock'>R</div>
 								<div class='fillin-subtotal inblock'>Loading..</div>
 							</td>
 						</tr>
 						<tr class="text-info">
 							<td colspan="4"><span class="pull-right">Delivery Cost</span></td>
-							<td>
+							<td colspan="2">
 								<div class='inblock'>R</div>
 								<div class='fillin-delivery inblock'>Loading..</div>
 							</td>
 						</tr>
 						<tr class="text-info">
 							<td colspan="4"><span class="pull-right">Amount Excl Vat</span></td>
-							<td>
+							<td colspan="2">
 								<div class='inblock'>R</div>
 								<div class='fillin-amountexvat inblock'>Loading..</div>
 							</td>
 						</tr>
 						<tr class="text-info">
 							<td colspan="4"><span class="pull-right">Vat</span></td>
-							<td>
+							<td colspan="2">
 								<div class='inblock'>R</div>
 								<div class='fillin-vat inblock'>Loading..</div>
 							</td>
 						</tr>
 						<tr class="text-info">
 							<td colspan="4"><span class="pull-right"><strong>Total</strong></span></td>
-							<td>
+							<td colspan="2">
 								<div class='strong inblock'>R</div>
 								<div class='fillin-totalinclvat strong inblock'>Loading..</div>
 							</td>
