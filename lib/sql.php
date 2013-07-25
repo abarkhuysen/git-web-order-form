@@ -79,11 +79,11 @@ class SQL_Connection {
 	 * @param  float $grand_total    The grand total for this order
 	 * @return void
 	 */
-	function updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total) {
+	function updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total, $vat) {
 		$this->querySql('
 			UPDATE orderdemo.orders 
 			SET items="'.$items.'", total_ex_vat="'.$total_ex_vat.'", 
-			total_incl_vat="'.$total_incl_vat.'", delivery="'.$delivery.'", grand_total="'.$grand_total.'"
+			total_incl_vat="'.$total_incl_vat.'", delivery="'.$delivery.'", grand_total="'.$grand_total.'", vat="'.$vat.'"
 			WHERE id="'.$id.'"',
 			'update');
 	}
