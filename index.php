@@ -41,15 +41,16 @@ $orderItems = $sqlConnector->getOrderItems(1);
 				<input name="order_id" id="order_id" type="hidden" value="1">
 				<input type="submit" class="btn" id="submitOrderItemForm" value="Add to order">
 			</form>
-			<span class="help-block error alert" id="codeSearch_error">The code can not be blank</span>
-			<span class="help-block error alert" id="qty_error">The quantity can not be blank</span>
+			<span class="help-block error alert alert-error" id="codeSearch_error">The code can not be blank</span>
+			<span class="help-block error alert alert-error" id="qty_error">The quantity can not be blank</span>
 			<span class="help-block error alert alert-success" id="message">The item was added to order</span>
+			<span class="help-block error alert alert-error" id="tableEmpty">No items in this order</span>
 		</div>
 
 		<div id="div1">
 			<div id="orderItemsList">
 				<?php echo "<form class='item-order-form' data-orderid='1'>" ?>
-				<table class="table table-condensed table-hover table-bordered">
+				<table class="table table-condensed table-hover table-bordered" id="tableForm">
 					<thead>
 						<tr>
 							<th>Code</th>
@@ -89,7 +90,8 @@ $orderItems = $sqlConnector->getOrderItems(1);
 						// 	echo "</tr>";
 						// }
 						?>
-
+					</tbody>
+					<tfoot>
 						<tr class="text-info">
 							<td colspan="4"><span class="pull-right">Items</span></td>
 							<td colspan="2">
@@ -131,7 +133,7 @@ $orderItems = $sqlConnector->getOrderItems(1);
 								<div class='fillin-totalinclvat strong inblock'>Loading..</div>
 							</td>
 						</tr>
-					</tbody>
+					</tfoot>
 				</table>
 
 				<div class="well well-small wellblack">
