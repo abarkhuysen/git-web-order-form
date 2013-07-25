@@ -4,8 +4,16 @@ $(document).ready(function() {
 	var zero = parseFloat(0).toFixed(2);
 	updateTotalsInView();
 	updateOrderTable(orderID);
+
+	// Hide all alert messages
 	$('.error').hide();
 
+	// See if table is empty on page load
+	if ($('#tableForm tbody tr').length == 0) {
+		$('#tableEmpty').fadeIn(500);
+	}
+
+	
 	// Submit 'Add an item' form
 	$("#submitOrderItemForm").click(function(e) {
 		e.preventDefault();
@@ -48,7 +56,7 @@ $(document).ready(function() {
 				data = JSON.parse(data);
 				var id = data[0].id;
 
-				$(".code-item").last().after("\
+				$('#tableForm').children('tbody').append("\
 					<tr class='code-item' data-code='"+code+"' data-price='"+price+"' data-id='"+id+"'>\
 						<td>"+code+"</td>\
 						<td>"+features+"</td>\
@@ -58,13 +66,21 @@ $(document).ready(function() {
 						<td><span class='btn btn-small btn-warning removeRow'><i class='icon-trash'></i></span></td>\
 					</tr>\
 					");
-
+				//Clear the typeahead search bar and qty after data insert
+				$('#codeSearch').val('');
+				$('#qty').val('');
 				// UPDATE VIEW TOTALS
 				var orderID = $(".item-order-form").attr("data-orderid");
 				updateTotalsInView();
 
 				// UPDATE DB TOTALS
 				updateOrderTable(orderID);
+
+				//Check if table is empty
+				if ($('#tableForm tbody tr').length >= 1) {
+						$('#tableEmpty').fadeOut(500);
+						updateTotalsInView();
+					};
 			}
 		});
 	});
@@ -145,25 +161,30 @@ $(document).ready(function() {
 	});
 
 	// On the click of .removeRow we fade out the row the delete the item from the database
-	// $(document).on("click", ".removeRow",
 	$(document).on("click", "span.removeRow", function() {
-		var item_id = $(this).parent().parent().attr('data-id');
-		var order_id = $(".item-order-form").attr("data-orderid");
-			$.ajax({
-				url: "lib/sql.php",
-				type: "POST",
-				data: {
-					fn: "removeProduct",
-					item_id: item_id,
-					order_id: order_id,
-					selectors: ""
-				},
-				success: function(data) {
-					//Added this function to our helps.js
-					removeRowFromDom(data);
-				}
-			});
+		if( confirm('Are you sure you want to rmove this item?') ) {
+			var item_id = $(this).parent().parent().attr('data-id');
+			var order_id = $(".item-order-form").attr("data-orderid");
+				$.ajax({
+					url: "lib/sql.php",
+					type: "POST",
+					data: {
+						fn: "removeProduct",
+						item_id: item_id,
+						order_id: order_id,
+						selectors: ""
+					},
+					success: function(data) {
+						//Added this function to our helps.js
+						removeRowFromDom(data);
 
+						if ($('#tableForm tbody tr').length <= 1) {
+							$('#tableEmpty').fadeIn(500);
+							updateTotalsInView();
+						};
+					}
+				});
+		}
 	});
 
 
