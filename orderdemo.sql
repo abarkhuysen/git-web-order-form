@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.5.2.2
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Jul 03, 2013 at 12:35 AM
--- Server version: 5.1.44
--- PHP Version: 5.3.1
+-- Host: 127.0.0.1
+-- Generation Time: Jul 25, 2013 at 01:57 PM
+-- Server version: 5.5.27
+-- PHP Version: 5.4.7
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -30,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `customer_id` int(11) NOT NULL,
   `items` bigint(20) NOT NULL,
   `total_ex_vat` decimal(10,2) NOT NULL,
+  `vat` decimal(10,2) NOT NULL,
   `total_incl_vat` decimal(10,2) NOT NULL,
   `delivery` decimal(10,2) NOT NULL,
   `grand_total` decimal(10,2) NOT NULL,
@@ -41,8 +43,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `total_incl_vat`, `delivery`, `grand_total`, `status`) VALUES
-(1, 1, 12, 0.00, 0.00, 89.00, 0.00, 'Open');
+INSERT INTO `orders` (`id`, `customer_id`, `items`, `total_ex_vat`, `vat`, `total_incl_vat`, `delivery`, `grand_total`, `status`) VALUES
+(1, 1, 10, 1000.00, 0.00, 1089.00, 89.00, 1241.46, 'Open');
 
 -- --------------------------------------------------------
 
@@ -57,15 +59,14 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   `price` decimal(10,2) NOT NULL,
   `qty` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=138 ;
 
 --
 -- Dumping data for table `order_items`
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `price`, `qty`) VALUES
-(2, 1, 1, 100.00, 6),
-(13, 1, 4, 1.75, 5);
+(137, 1, 1, 100.00, 10);
 
 -- --------------------------------------------------------
 
@@ -90,3 +91,7 @@ INSERT INTO `products` (`id`, `code`, `features`, `price`) VALUES
 (2, 'ABC123', 'Fusce mattis in ante cursus pellentesque', 50.00),
 (3, 'A1234A', 'Praesent nec nulla elit. In quis diam metus.', 599.00),
 (4, 'ACC345', 'Fusce consequat placerat dolor.', 1.75);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
