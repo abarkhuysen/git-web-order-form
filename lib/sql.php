@@ -12,10 +12,11 @@ if(isset($_POST['fn'])) {
 			$total_incl_vat = isset($_POST['total_incl_vat']) ? $_POST['total_incl_vat'] : null;
 			$delivery = isset($_POST['delivery']) ? $_POST['delivery'] : null;
 			$grand_total = isset($_POST['grand_total']) ? $_POST['grand_total'] : null;
+			$vat = isset($_POST['vat']) ? $_POST['vat'] : null;
 
 			// Update table with our POST data
 			$sqlConnector = new SQL_Connection();
-			$sqlConnector->updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total);
+			$sqlConnector->updateOrder($id, $items, $total_ex_vat, $total_incl_vat, $delivery, $grand_total, $vat);
 			break;
 
 		case 'updateOrderItem':

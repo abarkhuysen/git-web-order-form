@@ -151,7 +151,7 @@ function updateOrderTable(id) {
 			total_incl_vat: amountExVat,
 			delivery: totalDelivery,
 			grand_total: grandTotal,
-			vat: vatAmount,
+			vat: vatAmount
 		}
 	});
 }
